@@ -16,10 +16,12 @@ export class AppComponent extends React.Component<{}, {}> {
 
         return (
             <MuiThemeProvider>
-                <AppBar
-                    title="Docker Dashboard"
-                    showMenuIconButton={false}
-                    iconElementRight={newContainerButton}/>
+                <div>
+                    <AppBar
+                        title="Docker Dashboard"
+                        showMenuIconButton={false}
+                        iconElementRight={newContainerButton}/>
+                </div>
             </MuiThemeProvider>
         );
     }
