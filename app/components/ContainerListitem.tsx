@@ -18,11 +18,16 @@ export default class ContainerListItem extends React.Component<Container, {}> {
     render() {
         return (
             <Card>
-                <CardTitle title={this.props.name}></CardTitle>
-                <CardText>This is some text text to put in the card</CardText>
+                <CardTitle
+                    title={this.props.name}
+                    titleColor={ this.isRunning() ? '#00E676' : '#90A4AE'}/>
+                <CardText>
+                    <p>Name: {this.props.name}</p>
+                    <p>Image: <code>{this.props.image}</code></p>
+                    <p>Status: {this.props.status}</p>
+                </CardText>
                 <CardActions>
-                    <FlatButton label="Action"></FlatButton>
-                    <FlatButton label="Action"></FlatButton>
+                    <FlatButton label={ this.isRunning() ? 'Stop' : 'Start' }></FlatButton>
                 </CardActions>
             </Card>
         );
