@@ -1,8 +1,9 @@
+import * as io from 'socket.io-client';
 import * as React from 'react';
 import AppBar from 'material-ui/AppBar';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import IconButton from 'material-ui/IconButton';
-import { partition } from 'lodash';
+import { chain, partition } from 'lodash';
 
 import ContainerListItem, { Container } from './ContainerListitem';
 import ContainerList from './ContainerList';
@@ -12,33 +13,45 @@ class AppState {
     stoppedContainers?: Container[];
 }
 
+const socket = io.connect();
+
 export class AppComponent extends React.Component<{}, AppState> {
-    containers: Container[] = [
-        {
-            id: '1',
-            name: 'Test Container',
-            image: 'httpd',
-            state: 'running',
-            status: 'Running'
-        },
-        {
-            id: '2',
-            name: 'Test Container 2',
-            image: 'node',
-            state: 'stopped',
-            status: 'Running'
-        }
-    ]
 
     constructor() {
         super();
 
-        const partitioned = partition(this.containers, c => c.state === 'running');
-
         this.state = {
-            containers: partitioned[0],
-            stoppedContainers: partitioned[1]
+            containers: [],
+            stoppedContainers: []
         };
+
+        socket.on('containers.list', (containers: any) => {
+            console.log(containers);
+            const partitioned = partition(containers, (c: any) => c.state === 'running');
+
+            this.setState({
+                containers: partitioned[0].map(this.mapContainer),
+                stoppedContainers: partitioned[1].map(this.mapContainer)
+            });
+        });
+
+    }
+
+    mapContainer(container: any): Container {
+        return {
+            id: container.Id,
+            name: chain(container.Names)
+                .map((n: string) => n.substr(1))
+                .join(', ')
+                .value(),
+            state: container.State,
+            status: `${container.State} (${container.Status})`,
+            image: container.Image
+        };
+    }
+
+    componentDidMount() {
+        socket.emit('containers.list');
     }
 
     render() {
