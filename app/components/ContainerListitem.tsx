@@ -1,3 +1,4 @@
+import * as io from 'socket.io-client';
 import * as React from 'react';
 import { Card, CardActions, CardTitle, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
@@ -10,14 +11,25 @@ export interface Container {
     status: string
 }
 
+const socket = io.connect();
+
 export default class ContainerListItem extends React.Component<Container, {}> {
+    constructor() {
+        super();
+
+        this.handleStartStopClick = this.handleStartStopClick.bind(this);
+    }
     isRunning() {
         return this.props.state === 'running';
     }
 
+    handleStartStopClick() {
+        socket.emit(this.isRunning() ? 'container.stop' : 'container.start', { id: this.props.id });
+    }
+
     render() {
         return (
-            <Card>
+            <Card style={{ margin: '8px 0px' }}>
                 <CardTitle
                     title={this.props.name}
                     titleColor={ this.isRunning() ? '#00E676' : '#90A4AE'}/>
@@ -27,7 +39,9 @@ export default class ContainerListItem extends React.Component<Container, {}> {
                     <p>Status: {this.props.status}</p>
                 </CardText>
                 <CardActions>
-                    <FlatButton label={ this.isRunning() ? 'Stop' : 'Start' }></FlatButton>
+                    <FlatButton
+                        label={ this.isRunning() ? 'Stop' : 'Start' }
+                        onClick={this.handleStartStopClick}/>
                 </CardActions>
             </Card>
         );
