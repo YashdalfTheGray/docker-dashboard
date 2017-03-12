@@ -27,7 +27,7 @@ export class AppComponent extends React.Component<{}, AppState> {
 
         socket.on('containers.list', (containers: any) => {
             console.log(containers);
-            const partitioned = partition(containers, (c: any) => c.state === 'running');
+            const partitioned = partition(containers, (c: any) => c.State === 'running');
 
             this.setState({
                 containers: partitioned[0].map(this.mapContainer),
