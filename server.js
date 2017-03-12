@@ -27,7 +27,30 @@ server.listen(port, () => {
 });
 
 io.on('connection', socket => {
+    const refreshContainersInterval = setInterval(refreshContainers, 2000);
+
+    socket.on('disconnect', () => {
+        console.log('client disconnected');
+        clearInterval(refreshContainersInterval);
+    })
+
     socket.on('containers.list', () => {
         refreshContainers();
+    });
+
+    socket.on('container.start', ({ id }) => {
+        const container = docker.getContainer(id);
+
+        if (container) {
+            container.start((err, data) => refreshContainers);
+        }
+    });
+
+    socket.on('container.stop', ({ id }) => {
+        const container = docker.getContainer(id);
+
+        if (container) {
+            container.stop((err, data) => refreshContainers);
+        }
     });
 });
