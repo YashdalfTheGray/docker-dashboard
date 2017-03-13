@@ -4,12 +4,9 @@
         "sourceMap": true,
         "noImplicitAny": true,
         "module": "commonjs",
-        "target": "es5",
+        "target": "es6",
         "jsx": "react"
     },
-    "files": [
-        "node_modules/typescript/lib/lib.es6.d.ts"
-    ],
     "compileOnSave": false,
     "buildOnSave": false,
     "atom": {
