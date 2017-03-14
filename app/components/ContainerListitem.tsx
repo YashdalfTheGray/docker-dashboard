@@ -3,6 +3,8 @@ import * as React from 'react';
 import { Card, CardActions, CardTitle, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 
+import { getSocket } from '../services/socket';
+
 export interface Container {
     id: string,
     name: string,
@@ -11,7 +13,7 @@ export interface Container {
     status: string
 }
 
-const socket = io.connect();
+const socket = getSocket();
 
 export default class ContainerListItem extends React.Component<Container, {}> {
     constructor() {

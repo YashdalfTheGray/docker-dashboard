@@ -7,13 +7,14 @@ import { chain, partition } from 'lodash';
 
 import ContainerListItem, { Container } from './ContainerListitem';
 import ContainerList from './ContainerList';
+import { getSocket } from '../services/socket';
 
 class AppState {
     containers?: Container[];
     stoppedContainers?: Container[];
 }
 
-const socket = io.connect();
+const socket = getSocket();
 
 export class AppComponent extends React.Component<{}, AppState> {
 
@@ -26,7 +27,6 @@ export class AppComponent extends React.Component<{}, AppState> {
         };
 
         socket.on('containers.list', (containers: any) => {
-            console.log(containers);
             const partitioned = partition(containers, (c: any) => c.State === 'running');
 
             this.setState({
@@ -34,7 +34,6 @@ export class AppComponent extends React.Component<{}, AppState> {
                 stoppedContainers: partitioned[1].map(this.mapContainer)
             });
         });
-
     }
 
     mapContainer(container: any): Container {
