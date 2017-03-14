@@ -53,4 +53,23 @@ io.on('connection', socket => {
             container.stop((err, data) => refreshContainers);
         }
     });
+
+    socket.on('container.new', ({ name }) => {
+        docker.createContainer({ Image: name }, (err, container) => {
+            if (!err) {
+                socket.emit('container.created', container);
+                container.start((err, data) => {
+                    if (err) {
+                        socket.emit('container.error', { message: err })
+                    }
+                    else {
+                        socket.emit('container.started', data);
+                    }
+                });
+            }
+            else {
+                socket.emit('container.error', { message: err });
+            }
+        });
+    })
 });
