@@ -48,6 +48,14 @@ export class AppComponent extends React.Component<{}, AppState> {
                 stoppedContainers: partitioned[1].map(this.mapContainer)
             });
         });
+
+        socket.on('container.error', ({ message }: any) => {
+            console.error(message);
+        });
+
+        socket.on('container.started', () => {
+            console.log('Container started!');
+        });
     }
 
     componentDidMount() {
@@ -67,7 +75,7 @@ export class AppComponent extends React.Component<{}, AppState> {
     }
 
     handleRunContainer() {
-        console.log(`Attempting to run a new container with the ${this.state.imageName} image.`);
+        socket.emit('container.new', { name: this.state.imageName });
         this.handleNewContainerModalClose();
     }
 
