@@ -17,6 +17,7 @@ class AppState {
     stoppedContainers?: Container[];
     newContainerModalOpen?: boolean;
     imageName?: string;
+    isImageNameValid?: boolean;
 }
 
 const socket = getSocket();
@@ -30,7 +31,8 @@ export class AppComponent extends React.Component<{}, AppState> {
             containers: [],
             stoppedContainers: [],
             newContainerModalOpen: false,
-            imageName: ''
+            imageName: '',
+            isImageNameValid: false
         };
 
         this.handleNewContainerModalOpen = this.handleNewContainerModalOpen.bind(this);
@@ -69,9 +71,10 @@ export class AppComponent extends React.Component<{}, AppState> {
         this.handleNewContainerModalClose();
     }
 
-    handleImageNameChange(event: React.FormEvent<HTMLInputElement>) {
+    handleImageNameChange({ currentTarget: { value } }: React.FormEvent<HTMLInputElement>) {
         this.setState({
-            imageName: event.currentTarget.value
+            imageName: value,
+            isImageNameValid: value.length > 0
         });
     }
 
@@ -106,6 +109,7 @@ export class AppComponent extends React.Component<{}, AppState> {
             <FlatButton
                 label="Run"
                 primary={true}
+                disabled={!this.state.isImageNameValid}
                 onTouchTap={this.handleRunContainer} />
         ];
 
