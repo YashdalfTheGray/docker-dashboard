@@ -54,7 +54,10 @@ export class AppComponent extends React.Component<{}, AppState> {
         });
 
         socket.on('container.started', () => {
-            console.log('Container started!');
+            this.setState({
+                imageName: '',
+                isImageNameValid: false
+            });
         });
     }
 
