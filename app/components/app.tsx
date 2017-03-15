@@ -140,6 +140,7 @@ export class AppComponent extends React.Component<{}, AppState> {
                         modal={true}
                         open={this.state.newContainerModalOpen}>
                         <TextField
+                            autoFocus
                             floatingLabelText="Image name"
                             fullWidth={true}
                             value={this.state.imageName}
