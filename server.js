@@ -54,6 +54,14 @@ io.on('connection', socket => {
         }
     });
 
+    socket.on('container.remove', ({ id }) => {
+        const container = docker.getContainer(id);
+
+        if (container) {
+            container.remove((err, data) => refreshContainers);
+        }
+    });
+
     socket.on('container.new', ({ name }) => {
         docker.createContainer({ Image: name }, (err, container) => {
             if (!err) {
