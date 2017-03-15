@@ -20,6 +20,7 @@ export default class ContainerListItem extends React.Component<Container, {}> {
         super();
 
         this.handleStartStopClick = this.handleStartStopClick.bind(this);
+        this.handleDeleteClick = this.handleDeleteClick.bind(this);
     }
     isRunning() {
         return this.props.state === 'running';
@@ -27,6 +28,10 @@ export default class ContainerListItem extends React.Component<Container, {}> {
 
     handleStartStopClick() {
         socket.emit(this.isRunning() ? 'container.stop' : 'container.start', { id: this.props.id });
+    }
+
+    handleDeleteClick() {
+        socket.emit('container.remove', { id: this.props.id });
     }
 
     render() {
@@ -43,7 +48,10 @@ export default class ContainerListItem extends React.Component<Container, {}> {
                 <CardActions>
                     <FlatButton
                         label={ this.isRunning() ? 'Stop' : 'Start' }
-                        onClick={this.handleStartStopClick}/>
+                        onClick={this.handleStartStopClick} />
+                    <FlatButton
+                        label="Remove"
+                        onClick={this.handleDeleteClick} />
                 </CardActions>
             </Card>
         );
