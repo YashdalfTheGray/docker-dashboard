@@ -4,10 +4,10 @@
   "description": "a web dashboard for Docker",
   "main": "server.js",
   "scripts": {
-    "start": "concurrently \"nodemon server.js\" \"webpack --watch\"",
+    "start": "concurrently \"nodemon server/index.js\" \"webpack --watch\"",
     "production": "npm run build && npm run server",
     "build": "webpack -p",
-    "server": "node server.js"
+    "server": "node server/index.js"
   },
   "repository": {
     "type": "git",
