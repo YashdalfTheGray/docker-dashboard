@@ -9,7 +9,7 @@ import IconButton from 'material-ui/IconButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import TextField from 'material-ui/TextField';
 
-import ContainerListItem, { Container } from './ContainerListitem';
+import { Container } from './ContainerListItem';
 import ContainerList from './ContainerList';
 import { getSocket } from '../services/socket';
 
