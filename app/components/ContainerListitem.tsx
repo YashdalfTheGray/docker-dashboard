@@ -1,26 +1,37 @@
 import * as React from 'react';
-import { Card, CardActions, CardTitle, CardText } from 'material-ui/Card';
-import FlatButton from 'material-ui/FlatButton';
+
+import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+import Chip from '@material-ui/core/Chip';
+import blueGrey from '@material-ui/core/colors/blueGrey';
+import green from '@material-ui/core/colors/green';
+import { Theme } from '@material-ui/core/styles/createMuiTheme';
+import createStyles from '@material-ui/core/styles/createStyles';
+import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 
 import { getSocket } from '../services/socket';
-
-export interface Container {
-  id: string;
-  name: string;
-  image: string;
-  state: string;
-  status: string;
-}
+import { Container } from '../types/Container';
 
 interface IContainerListItemProps {
   container: Container;
 }
 
+const containerListItemStyles = (theme: Theme) =>
+  createStyles({
+    chip: {
+      margin: theme.spacing.unit
+    }
+  });
+
+type ContainerListItemProps = IContainerListItemProps &
+  WithStyles<typeof containerListItemStyles>;
+
 const socket = getSocket();
 
-export default class ContainerListItem extends React.Component<
-  IContainerListItemProps
-> {
+class ContainerListItem extends React.Component<ContainerListItemProps> {
   public isRunning = () => {
     const { container } = this.props;
     return container.state === 'running';
@@ -38,29 +49,44 @@ export default class ContainerListItem extends React.Component<
     socket.emit('container.remove', { id: container.id });
   };
 
-  render() {
-    const { container } = this.props;
+  public render() {
+    const { classes, container } = this.props;
     return (
       <Card style={{ margin: '8px 0px' }}>
-        <CardTitle
+        <CardHeader
           title={container.name}
-          titleColor={this.isRunning() ? '#00E676' : '#90A4AE'}
+          subheader={
+            this.isRunning() ? (
+              <Chip
+                label="Running"
+                className={classes.chip}
+                classes={{ colorPrimary: green.A400 }}
+              />
+            ) : (
+              <Chip
+                label="Stopped"
+                className={classes.chip}
+                classes={{ colorPrimary: blueGrey[300] }}
+              />
+            )
+          }
         />
-        <CardText>
+        <CardContent>
           <p>Name: {container.name}</p>
           <p>
             Image: <code>{container.image}</code>
           </p>
           <p>Status: {container.status}</p>
-        </CardText>
+        </CardContent>
         <CardActions>
-          <FlatButton
-            label={this.isRunning() ? 'Stop' : 'Start'}
-            onClick={this.handleStartStopClick}
-          />
-          <FlatButton label="Remove" onClick={this.handleDeleteClick} />
+          <Button onClick={this.handleStartStopClick} color="primary">
+            {this.isRunning() ? 'Stop' : 'Start'}
+          </Button>
+          <Button onClick={this.handleDeleteClick}>Remove</Button>
         </CardActions>
       </Card>
     );
   }
 }
+
+export default withStyles(containerListItemStyles)(ContainerListItem);
