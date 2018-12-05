@@ -2,16 +2,21 @@ import * as React from 'react';
 
 import { chain, partition } from 'lodash';
 
-import AppBar from 'material-ui/AppBar';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
-import IconButton from 'material-ui/IconButton';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import TextField from 'material-ui/TextField';
+import AppBar from '@material-ui/core/AppBar';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import IconButton from '@material-ui/core/IconButton';
+import { Theme } from '@material-ui/core/styles/createMuiTheme';
+import createStyles from '@material-ui/core/styles/createStyles';
+import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
+import TextField from '@material-ui/core/TextField';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import AddIcon from '@material-ui/icons/Add';
 
-import { Container } from './ContainerListItem';
-import ContainerList from './ContainerList';
 import { getSocket } from '../services/socket';
+import { Container } from '../types/Container';
+import ContainerList from './ContainerList';
 
 interface IAppState {
   containers?: Container[];
@@ -21,10 +26,28 @@ interface IAppState {
   isImageNameValid?: boolean;
 }
 
+const appComponentStyles = (theme: Theme) =>
+  createStyles({
+    root: {
+      flexGrow: 1
+    },
+    grow: {
+      flexGrow: 1
+    },
+    appFrame: {
+      marginTop: '72px'
+    },
+    button: {
+      margin: theme.spacing.unit
+    }
+  });
+
+type AppComponentProps = WithStyles<typeof appComponentStyles>;
+
 const socket = getSocket();
 
-export class AppComponent extends React.Component<{}, IAppState> {
-  constructor(props: {}) {
+class AppComponent extends React.Component<AppComponentProps, IAppState> {
+  constructor(props: AppComponentProps) {
     super(props);
 
     this.state = {
@@ -50,6 +73,7 @@ export class AppComponent extends React.Component<{}, IAppState> {
     });
 
     socket.on('container.error', ({ message }: any) => {
+      // tslint:disable-next-line:no-console
       console.error(message);
     });
 
@@ -103,58 +127,66 @@ export class AppComponent extends React.Component<{}, IAppState> {
   };
 
   public render() {
-    const newContainerButton = (
-      <IconButton
-        iconClassName="material-icons"
-        tooltip="New container"
-        style={{ marginRight: '8px' }}>
-        add
-      </IconButton>
-    );
+    const { classes } = this.props;
 
     const newContainerModalActions = [
-      <FlatButton
-        label="Close"
-        primary={false}
+      <Button
+        key="close-button"
         onClick={this.handleNewContainerModalClose}
-      />,
-      <FlatButton
-        label="Run"
-        primary={true}
+        aria-label="Close">
+        Close
+      </Button>,
+      <Button
+        key="run-button"
         disabled={!this.state.isImageNameValid}
         onClick={this.handleRunContainer}
-      />
+        aria-label="Run">
+        Run
+      </Button>
     ];
 
     return (
-      <MuiThemeProvider>
-        <div>
-          <AppBar
-            title="Docker Dashboard"
-            showMenuIconButton={false}
-            iconElementRight={newContainerButton}
-            onRightIconButtonTouchTap={this.handleNewContainerModalOpen}
+      <div className={classes.root}>
+        <AppBar>
+          <Toolbar>
+            <Typography variant="h6" color="inherit" className={classes.grow}>
+              Docker Dashboard
+            </Typography>
+            <IconButton
+              className={classes.button}
+              aria-label="Add"
+              color="inherit"
+              onClick={this.handleNewContainerModalOpen}>
+              <AddIcon />
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+        <div className={classes.appFrame}>
+          <ContainerList
+            title="Running"
+            containers={this.state.containers || []}
           />
-          <ContainerList title="Running" containers={this.state.containers} />
           <ContainerList
             title="Stopped"
-            containers={this.state.stoppedContainers}
+            containers={this.state.stoppedContainers || []}
           />
-          <Dialog
-            title="Create a new container"
-            actions={newContainerModalActions}
-            modal={true}
-            open={this.state.newContainerModalOpen}>
-            <TextField
-              autoFocus
-              floatingLabelText="Image name"
-              fullWidth={true}
-              value={this.state.imageName}
-              onChange={this.handleImageNameChange}
-            />
-          </Dialog>
         </div>
-      </MuiThemeProvider>
+        {/* <Dialog
+          title="Create a new container"
+          actions={newContainerModalActions}
+          modal={true}
+          open={this.state.newContainerModalOpen}>
+          <TextField
+            autoFocus
+            floatingLabelText="Image name"
+            fullWidth={true}
+            value={this.state.imageName}
+            onChange={this.handleImageNameChange}
+          />
+        </Dialog> */}
+      </div>
     );
   }
 }
+
+export default withStyles(appComponentStyles)(AppComponent);
