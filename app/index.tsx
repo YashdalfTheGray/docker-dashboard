@@ -1,12 +1,13 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import * as injectTapEventPlugin from 'react-tap-event-plugin';
 
-import { AppComponent } from './components/app';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
-injectTapEventPlugin();
+import AppComponent from './components/app';
 
 ReactDOM.render(
-    <AppComponent />,
-    document.querySelector('#app')
+  <CssBaseline>
+    <AppComponent />
+  </CssBaseline>,
+  document.querySelector('#app')
 );
