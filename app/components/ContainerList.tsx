@@ -1,17 +1,17 @@
 import * as React from 'react';
 
-import ContainerListItem, { Container } from './ContainerListItem';
+import { Container } from '../types/Container';
+import ContainerListItem from './ContainerListItem';
 
-export class ContainerListProps {
+interface IContainerListProps {
   containers: Container[];
   title?: string;
 }
 
 export default class ContainerList extends React.Component<
-  ContainerListProps,
-  {}
+  IContainerListProps
 > {
-  render() {
+  public render() {
     return (
       <div style={{ margin: '16px' }}>
         <h3 style={{ fontFamily: 'Roboto' }}>{this.props.title}</h3>
