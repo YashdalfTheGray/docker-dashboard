@@ -176,19 +176,6 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
           onClick={this.handleNewContainerModalOpen}>
           <AddIcon />
         </Button>
-        {/* <Dialog
-          title="Create a new container"
-          actions={newContainerModalActions}
-          modal={true}
-          open={this.state.newContainerModalOpen}>
-          <TextField
-            autoFocus
-            floatingLabelText="Image name"
-            fullWidth={true}
-            value={this.state.imageName}
-            onChange={this.handleImageNameChange}
-          />
-        </Dialog> */}
       </div>
     );
   }
