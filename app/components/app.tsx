@@ -39,6 +39,11 @@ const appComponentStyles = (theme: Theme) =>
     },
     button: {
       margin: theme.spacing.unit
+    },
+    fab: {
+      position: 'fixed',
+      bottom: theme.spacing.unit * 2,
+      right: theme.spacing.unit * 2
     }
   });
 
@@ -152,13 +157,6 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
             <Typography variant="h6" color="inherit" className={classes.grow}>
               Docker Dashboard
             </Typography>
-            <IconButton
-              className={classes.button}
-              aria-label="Add"
-              color="inherit"
-              onClick={this.handleNewContainerModalOpen}>
-              <AddIcon />
-            </IconButton>
           </Toolbar>
         </AppBar>
         <div className={classes.appFrame}>
@@ -171,6 +169,13 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
             containers={this.state.stoppedContainers || []}
           />
         </div>
+        <Button
+          variant="fab"
+          className={classes.fab}
+          color="secondary"
+          onClick={this.handleNewContainerModalOpen}>
+          <AddIcon />
+        </Button>
         {/* <Dialog
           title="Create a new container"
           actions={newContainerModalActions}
