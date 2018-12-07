@@ -11,6 +11,7 @@ import green from '@material-ui/core/colors/green';
 import { Theme } from '@material-ui/core/styles/createMuiTheme';
 import createStyles from '@material-ui/core/styles/createStyles';
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
+import Typography from '@material-ui/core/Typography';
 
 import { getSocket } from '../services/socket';
 import { Container } from '../types/Container';
@@ -23,6 +24,11 @@ const containerListItemStyles = (theme: Theme) =>
   createStyles({
     chip: {
       margin: theme.spacing.unit
+    },
+    titleRow: {
+      display: 'flex',
+      justifyContent: 'flex-start',
+      alignItems: 'center'
     }
   });
 
@@ -54,29 +60,32 @@ class ContainerListItem extends React.Component<ContainerListItemProps> {
     return (
       <Card style={{ margin: '8px 0px' }}>
         <CardHeader
-          title={container.name}
-          subheader={
-            this.isRunning() ? (
-              <Chip
-                label="Running"
-                className={classes.chip}
-                classes={{ colorPrimary: green.A400 }}
-              />
-            ) : (
-              <Chip
-                label="Stopped"
-                className={classes.chip}
-                classes={{ colorPrimary: blueGrey[300] }}
-              />
-            )
+          title={
+            <span className={classes.titleRow}>
+              <Typography variant="h5" component="h2">
+                {container.name}
+              </Typography>
+              {this.isRunning() ? (
+                <Chip
+                  label="Running"
+                  className={classes.chip}
+                  classes={{ colorPrimary: green.A400 }}
+                />
+              ) : (
+                <Chip
+                  label="Stopped"
+                  className={classes.chip}
+                  classes={{ colorPrimary: blueGrey[300] }}
+                />
+              )}
+            </span>
           }
         />
         <CardContent>
-          <p>Name: {container.name}</p>
-          <p>
+          <Typography variant="body2">
             Image: <code>{container.image}</code>
-          </p>
-          <p>Status: {container.status}</p>
+          </Typography>
+          <Typography variant="body2">Status: {container.status}</Typography>
         </CardContent>
         <CardActions>
           <Button onClick={this.handleStartStopClick} color="primary">
