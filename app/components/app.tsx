@@ -134,22 +134,6 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
   public render() {
     const { classes } = this.props;
 
-    const newContainerModalActions = [
-      <Button
-        key="close-button"
-        onClick={this.handleNewContainerModalClose}
-        aria-label="Close">
-        Close
-      </Button>,
-      <Button
-        key="run-button"
-        disabled={!this.state.isImageNameValid}
-        onClick={this.handleRunContainer}
-        aria-label="Run">
-        Run
-      </Button>
-    ];
-
     return (
       <div className={classes.root}>
         <AppBar>
