@@ -38,16 +38,20 @@
     "@types/react-tap-event-plugin": "0.0.30",
     "@types/socket.io": "^2.1.0",
     "@types/socket.io-client": "^1.4.29",
+    "@types/yup": "^0.26.2",
     "chalk": "^2.4.1",
     "concurrently": "^4.1.0",
     "dockerode": "^2.4.1",
     "express": "^4.15.2",
+    "formik": "^1.4.0",
+    "formik-material-ui": "0.0.16",
     "lodash": "^4.17.4",
     "morgan": "^1.8.1",
     "nodemon": "^1.11.0",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
-    "socket.io": "^2.2.0"
+    "socket.io": "^2.2.0",
+    "yup": "^0.26.6"
   },
   "devDependencies": {
     "@babel/core": "^7.1.6",
