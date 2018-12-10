@@ -25,7 +25,7 @@ import ContainerList from './ContainerList';
 interface IAppState {
   containers?: Container[];
   stoppedContainers?: Container[];
-  newContainerModalOpen?: boolean;
+  runContainerModalOpen?: boolean;
   imageName?: string;
   isImageNameValid?: boolean;
 }
@@ -62,7 +62,7 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
     this.state = {
       containers: [],
       stoppedContainers: [],
-      newContainerModalOpen: false,
+      runContainerModalOpen: false,
       imageName: '',
       isImageNameValid: false
     };
@@ -98,13 +98,13 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
 
   public handleNewContainerModalOpen = () => {
     this.setState({
-      newContainerModalOpen: true
+      runContainerModalOpen: true
     });
   };
 
   public handleNewContainerModalClose = () => {
     this.setState({
-      newContainerModalOpen: false
+      runContainerModalOpen: false
     });
   };
 
@@ -137,6 +137,7 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
 
   public render() {
     const { classes } = this.props;
+    const { runContainerModalOpen } = this.state;
 
     return (
       <div className={classes.root}>
@@ -164,6 +165,11 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
           onClick={this.handleNewContainerModalOpen}>
           <AddIcon />
         </Button>
+        <AddContainerDialog
+          open={runContainerModalOpen || false}
+          onCancel={this.handleNewContainerModalClose}
+          onSubmit={this.handleRunContainer}
+        />
       </div>
     );
   }
