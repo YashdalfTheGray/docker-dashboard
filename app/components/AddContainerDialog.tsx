@@ -12,20 +12,20 @@ import { Field, Formik, FormikProps } from 'formik';
 import { fieldToTextField, TextFieldProps } from 'formik-material-ui';
 import { string } from 'yup';
 
+export interface IAddDialogFormInitialValues {
+  imageName: string;
+}
+
 interface IAddContainerDialogProps {
   open: boolean;
   onCancel: () => void;
-  onSubmit: () => void;
+  onSubmit: (values: IAddDialogFormInitialValues) => void;
 }
 
 interface IAddContainerDialogState {
   imageName: string;
   isValid: boolean;
   isTouched: boolean;
-}
-
-export interface IAddDialogFormInitialValues {
-  imageName: string;
 }
 
 class AddContainerDialog extends React.Component<
