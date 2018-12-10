@@ -8,6 +8,10 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 
+import { Field, Formik, FormikProps } from 'formik';
+import { fieldToTextField, TextFieldProps } from 'formik-material-ui';
+import { string } from 'yup';
+
 interface IAddContainerDialogProps {
   open: boolean;
   onCancel: () => void;
@@ -20,10 +24,18 @@ interface IAddContainerDialogState {
   isTouched: boolean;
 }
 
+export interface IAddDialogFormInitialValues {
+  imageName: string;
+}
+
 class AddContainerDialog extends React.Component<
   IAddContainerDialogProps,
   IAddContainerDialogState
 > {
+  private readonly validationSchema = string().required(
+    'Image name is required'
+  );
+
   constructor(props: IAddContainerDialogProps) {
     super(props);
 
@@ -33,6 +45,7 @@ class AddContainerDialog extends React.Component<
       isValid: false
     };
   }
+
   public render() {
     const { open, onCancel, onSubmit } = this.props;
 
@@ -47,13 +60,20 @@ class AddContainerDialog extends React.Component<
             To subscribe to this website, please enter your email address here.
             We will send updates occasionally.
           </DialogContentText>
-          <TextField
-            autoFocus={true}
-            margin="dense"
-            id="imageName"
-            label="Image Name"
-            fullWidth={true}
-          />
+          <Formik
+            initialValues={{ imageName: '' }}
+            onSubmit={onSubmit}
+            validationSchema={this.validationSchema}>
+            {(props: FormikProps<IAddDialogFormInitialValues>) => (
+              <form onSubmit={props.handleSubmit}>
+                <Field
+                  name="imageName"
+                  label="Image mame"
+                  component={this.ModifiedTextField('imageName')}
+                />
+              </form>
+            )}
+          </Formik>
         </DialogContent>
         <DialogActions>
           <Button onClick={onCancel} color="primary">
@@ -66,4 +86,16 @@ class AddContainerDialog extends React.Component<
       </Dialog>
     );
   }
+
+  private ModifiedTextField = (muiId: string) => (props: TextFieldProps) => (
+    <TextField
+      id={muiId}
+      {...fieldToTextField(props)}
+      autoFocus={true}
+      margin="dense"
+      fullWidth={true}
+    />
+  );
 }
+
+export default AddContainerDialog;
