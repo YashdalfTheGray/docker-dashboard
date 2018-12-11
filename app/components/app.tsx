@@ -4,12 +4,9 @@ import { chain, partition } from 'lodash';
 
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import IconButton from '@material-ui/core/IconButton';
 import { Theme } from '@material-ui/core/styles/createMuiTheme';
 import createStyles from '@material-ui/core/styles/createStyles';
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
-import TextField from '@material-ui/core/TextField';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
@@ -110,6 +107,8 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
 
   public handleRunContainer = (values: IAddDialogFormInitialValues) => {
     // socket.emit('container.new', { name: this.state.imageName });
+    // tslint:disable-next-line:no-console
+    console.log(values);
     this.handleNewContainerModalClose();
   };
 
