@@ -57,8 +57,8 @@ class AddContainerDialog extends React.Component<
         <DialogTitle id="form-dialog-title">Run new container</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            To subscribe to this website, please enter your email address here.
-            We will send updates occasionally.
+            To run a new container, please provide an image name. Docker will
+            pull the image if necessary and will run a container with it.
           </DialogContentText>
           <Formik
             initialValues={{ imageName: '' }}
@@ -76,11 +76,11 @@ class AddContainerDialog extends React.Component<
           </Formik>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onCancel} color="primary">
+          <Button type="button" onClick={onCancel} color="primary">
             Cancel
           </Button>
-          <Button onClick={onSubmit} color="primary">
-            Subscribe
+          <Button type="submit" color="primary">
+            Submit
           </Button>
         </DialogActions>
       </Dialog>
