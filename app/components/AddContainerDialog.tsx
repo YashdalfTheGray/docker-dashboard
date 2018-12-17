@@ -8,9 +8,8 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 
-import { Field, Formik, FormikProps } from 'formik';
-import { fieldToTextField, TextFieldProps } from 'formik-material-ui';
-import { string } from 'yup';
+import { Field, FieldProps, Formik, FormikProps } from 'formik';
+import { object, string } from 'yup';
 
 export interface IAddDialogFormInitialValues {
   imageName: string;
@@ -32,9 +31,9 @@ class AddContainerDialog extends React.Component<
   IAddContainerDialogProps,
   IAddContainerDialogState
 > {
-  private readonly validationSchema = string().required(
-    'Image name is required'
-  );
+  private readonly validationSchema = object().shape({
+    imageName: string().required('Image name is required')
+  });
 
   constructor(props: IAddContainerDialogProps) {
     super(props);
@@ -68,8 +67,11 @@ class AddContainerDialog extends React.Component<
               <form onSubmit={props.handleSubmit}>
                 <Field
                   name="imageName"
-                  label="Image mame"
-                  component={this.ModifiedTextField('imageName')}
+                  render={({
+                    field
+                  }: FieldProps<IAddDialogFormInitialValues>) => (
+                    <TextField {...field} fullWidth={true} label="Image name" />
+                  )}
                 />
               </form>
             )}
@@ -86,16 +88,6 @@ class AddContainerDialog extends React.Component<
       </Dialog>
     );
   }
-
-  private ModifiedTextField = (muiId: string) => (props: TextFieldProps) => (
-    <TextField
-      id={muiId}
-      {...fieldToTextField(props)}
-      autoFocus={true}
-      margin="dense"
-      fullWidth={true}
-    />
-  );
 }
 
 export default AddContainerDialog;
