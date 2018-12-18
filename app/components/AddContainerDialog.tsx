@@ -8,7 +8,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 
-import { Field, FieldProps, Formik, FormikProps } from 'formik';
+import { Field, FieldProps, Formik, FormikProps, getIn } from 'formik';
 import { object, string } from 'yup';
 
 export interface IAddDialogFormInitialValues {
@@ -68,9 +68,23 @@ class AddContainerDialog extends React.Component<
                 <Field
                   name="imageName"
                   render={({
-                    field
+                    field,
+                    form
                   }: FieldProps<IAddDialogFormInitialValues>) => (
-                    <TextField {...field} fullWidth={true} label="Image name" />
+                    <TextField
+                      {...field}
+                      fullWidth={true}
+                      label="Image name"
+                      error={
+                        getIn(form.touched, field.name) &&
+                        !!getIn(form.errors, field.name)
+                      }
+                      helperText={
+                        getIn(form.touched, field.name)
+                          ? getIn(form.errors, field.name)
+                          : ''
+                      }
+                    />
                   )}
                 />
               </form>
