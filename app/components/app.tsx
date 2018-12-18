@@ -48,8 +48,6 @@ const appComponentStyles = (theme: Theme) =>
 
 type AppComponentProps = WithStyles<typeof appComponentStyles>;
 
-const socket = getSocket();
-
 class AppComponent extends React.Component<AppComponentProps, IAppState> {
   constructor(props: AppComponentProps) {
     super(props);
@@ -64,6 +62,7 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
   }
 
   public componentDidMount() {
+    const socket = getSocket();
     socket.on('containers.list', (containers: any) => {
       const partitioned = partition(
         containers,
@@ -103,10 +102,9 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
     });
   };
 
-  public handleRunContainer = (values: IAddDialogFormValues) => {
-    // socket.emit('container.new', { name: this.state.imageName });
-    // tslint:disable-next-line:no-console
-    console.log(values);
+  public handleRunContainer = ({ imageName: name }: IAddDialogFormValues) => {
+    const socket = getSocket();
+    socket.emit('container.new', { name });
     this.handleNewContainerModalClose();
   };
 

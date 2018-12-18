@@ -54,6 +54,7 @@ class AddContainerDialog extends React.Component<IAddContainerDialogProps> {
                   }: FieldProps<IAddDialogFormValues>) => (
                     <TextField
                       {...field}
+                      autoFocus={true}
                       fullWidth={true}
                       label="Image name"
                       error={
