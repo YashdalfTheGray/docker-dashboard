@@ -14,9 +14,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { getSocket } from '../services/socket';
 import { Container } from '../types/Container';
 
-import AddContainerDialog, {
-  IAddDialogFormInitialValues
-} from './AddContainerDialog';
+import AddContainerDialog, { IAddDialogFormValues } from './AddContainerDialog';
 import ContainerList from './ContainerList';
 
 interface IAppState {
@@ -105,7 +103,7 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
     });
   };
 
-  public handleRunContainer = (values: IAddDialogFormInitialValues) => {
+  public handleRunContainer = (values: IAddDialogFormValues) => {
     // socket.emit('container.new', { name: this.state.imageName });
     // tslint:disable-next-line:no-console
     console.log(values);

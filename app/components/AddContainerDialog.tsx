@@ -11,39 +11,20 @@ import TextField from '@material-ui/core/TextField';
 import { Field, FieldProps, Formik, FormikProps, getIn } from 'formik';
 import { object, string } from 'yup';
 
-export interface IAddDialogFormInitialValues {
+export interface IAddDialogFormValues {
   imageName: string;
 }
 
 interface IAddContainerDialogProps {
   open: boolean;
   onCancel: () => void;
-  onSubmit: (values: IAddDialogFormInitialValues) => void;
+  onSubmit: (values: IAddDialogFormValues) => void;
 }
 
-interface IAddContainerDialogState {
-  imageName: string;
-  isValid: boolean;
-  isTouched: boolean;
-}
-
-class AddContainerDialog extends React.Component<
-  IAddContainerDialogProps,
-  IAddContainerDialogState
-> {
+class AddContainerDialog extends React.Component<IAddContainerDialogProps> {
   private readonly validationSchema = object().shape({
     imageName: string().required('Image name is required')
   });
-
-  constructor(props: IAddContainerDialogProps) {
-    super(props);
-
-    this.state = {
-      imageName: '',
-      isTouched: false,
-      isValid: false
-    };
-  }
 
   public render() {
     const { open, onCancel, onSubmit } = this.props;
@@ -63,14 +44,14 @@ class AddContainerDialog extends React.Component<
             initialValues={{ imageName: '' }}
             onSubmit={onSubmit}
             validationSchema={this.validationSchema}>
-            {(props: FormikProps<IAddDialogFormInitialValues>) => (
+            {(props: FormikProps<IAddDialogFormValues>) => (
               <form onSubmit={props.handleSubmit}>
                 <Field
                   name="imageName"
                   render={({
                     field,
                     form
-                  }: FieldProps<IAddDialogFormInitialValues>) => (
+                  }: FieldProps<IAddDialogFormValues>) => (
                     <TextField
                       {...field}
                       fullWidth={true}
