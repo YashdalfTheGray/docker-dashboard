@@ -11,17 +11,17 @@ import TextField from '@material-ui/core/TextField';
 import { Field, FieldProps, Formik, FormikProps, getIn } from 'formik';
 import { object, string } from 'yup';
 
-export interface IAddDialogFormValues {
+export interface IRunDialogFormValues {
   imageName: string;
 }
 
-interface IAddContainerDialogProps {
+interface IRunContainerDialogProps {
   open: boolean;
   onCancel: () => void;
-  onSubmit: (values: IAddDialogFormValues) => void;
+  onSubmit: (values: IRunDialogFormValues) => void;
 }
 
-class AddContainerDialog extends React.Component<IAddContainerDialogProps> {
+class RunContainerDialog extends React.Component<IRunContainerDialogProps> {
   private readonly validationSchema = object().shape({
     imageName: string().required('Image name is required')
   });
@@ -44,14 +44,14 @@ class AddContainerDialog extends React.Component<IAddContainerDialogProps> {
             initialValues={{ imageName: '' }}
             onSubmit={onSubmit}
             validationSchema={this.validationSchema}>
-            {(props: FormikProps<IAddDialogFormValues>) => (
+            {(props: FormikProps<IRunDialogFormValues>) => (
               <form onSubmit={props.handleSubmit}>
                 <Field
                   name="imageName"
                   render={({
                     field,
                     form
-                  }: FieldProps<IAddDialogFormValues>) => (
+                  }: FieldProps<IRunDialogFormValues>) => (
                     <TextField
                       {...field}
                       autoFocus={true}
@@ -86,4 +86,4 @@ class AddContainerDialog extends React.Component<IAddContainerDialogProps> {
   }
 }
 
-export default AddContainerDialog;
+export default RunContainerDialog;

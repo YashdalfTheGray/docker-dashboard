@@ -14,7 +14,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { getSocket } from '../services/socket';
 import { Container } from '../types/Container';
 
-import AddContainerDialog, { IAddDialogFormValues } from './AddContainerDialog';
+import RunContainerDialog, { IRunDialogFormValues } from './AddContainerDialog';
 import ContainerList from './ContainerList';
 
 interface IAppState {
@@ -102,7 +102,7 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
     });
   };
 
-  public handleRunContainer = ({ imageName: name }: IAddDialogFormValues) => {
+  public handleRunContainer = ({ imageName: name }: IRunDialogFormValues) => {
     const socket = getSocket();
     socket.emit('container.new', { name });
     this.handleNewContainerModalClose();
@@ -160,7 +160,7 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
           onClick={this.handleNewContainerModalOpen}>
           <AddIcon />
         </Button>
-        <AddContainerDialog
+        <RunContainerDialog
           open={runContainerModalOpen || false}
           onCancel={this.handleNewContainerModalClose}
           onSubmit={this.handleRunContainer}
