@@ -1,4 +1,4 @@
-const Docker = require('dockerode');
+import Docker from 'dockerode';
 
 const isWindows = process.platform === 'win32';
 
@@ -15,4 +15,4 @@ if (isWindows) {
   };
 }
 
-module.exports = new Docker(options);
+export default new Docker(options);
