@@ -1,10 +1,10 @@
 // tslint:disable:no-console
 
 import chalk from 'chalk';
-import express from 'express';
+import * as express from 'express';
 import { Server } from 'http';
-import morgan from 'morgan';
-import socketIo from 'socket.io';
+import * as morgan from 'morgan';
+import * as socketIo from 'socket.io';
 
 import docker from './docker-api';
 
