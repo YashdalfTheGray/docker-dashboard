@@ -1,10 +1,6 @@
 {
-    "ignore": [
-        "app/**",
-        "node_modules/**",
-        "public/**"
-    ],
-    "watch": [
-        "server.js"
-    ]
+  "ignore": ["app/**", "node_modules/**", "public/**", "dist/**"],
+  "watch": ["server/**"],
+  "ext": "ts",
+  "exec": "ts-node ./server/index.ts"
 }
