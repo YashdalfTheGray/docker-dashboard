@@ -7,6 +7,7 @@ import * as morgan from 'morgan';
 import * as socketIo from 'socket.io';
 
 import docker from './docker-api';
+import * as events from './socket-events';
 
 const app = express();
 const server = new Server(app);
@@ -14,10 +15,13 @@ const io = socketIo(server);
 
 const port = process.env.PORT || process.argv[2] || 3000;
 
-function refreshContainers() {
-  docker.listContainers({ all: true }, (err, containers) => {
-    io.emit('containers.list', containers);
-  });
+async function refreshContainers() {
+  try {
+    const containers = await docker.listContainers({ all: true });
+    io.emit(events.listContainersSuccess, containers);
+  } catch (err) {
+    io.emit(events.listContainersError, err);
+  }
 }
 
 app.use(morgan('dev'));
@@ -35,15 +39,28 @@ io.on('connection', socket => {
     clearInterval(refreshContainersInterval);
   });
 
-  socket.on('containers.list', () => {
-    refreshContainers();
+  socket.on(events.listContainers, async () => {
+    socket.emit(events.listContainersAck);
+    await refreshContainers();
   });
 
-  socket.on('container.start', ({ id }) => {
+  socket.on(events.startContainer, async ({ id }) => {
+    socket.emit(events.startContainerAck);
     const container = docker.getContainer(id);
 
     if (container) {
-      container.start((err, data) => refreshContainers);
+      try {
+        await container.start();
+        socket.emit(events.startContainerSuccess);
+        await refreshContainers();
+      } catch (err) {
+        socket.emit(events.startContainerError, err);
+      }
+    } else {
+      socket.emit(
+        events.startContainerError,
+        new Error('No container by that name')
+      );
     }
   });
 
