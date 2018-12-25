@@ -6,8 +6,8 @@ import { Server } from 'http';
 import * as morgan from 'morgan';
 import * as socketIo from 'socket.io';
 
+import { events } from '../common';
 import docker from './docker-api';
-import * as events from './socket-events';
 
 const app = express();
 const server = new Server(app);
@@ -59,41 +59,61 @@ io.on('connection', socket => {
     } else {
       socket.emit(
         events.startContainerError,
-        new Error('No container by that name')
+        new Error('No container by that id')
       );
     }
   });
 
-  socket.on('container.stop', ({ id }) => {
+  socket.on(events.stopContainer, async ({ id }) => {
+    socket.emit(events.stopContainerAck);
     const container = docker.getContainer(id);
 
     if (container) {
-      container.stop((err, data) => refreshContainers);
-    }
-  });
-
-  socket.on('container.remove', ({ id }) => {
-    const container = docker.getContainer(id);
-
-    if (container) {
-      container.remove((err, data) => refreshContainers);
-    }
-  });
-
-  socket.on('container.new', ({ name }) => {
-    docker.createContainer({ Image: name }, (err, container) => {
-      if (!err) {
-        socket.emit('container.created', container);
-        container.start((startErr, data) => {
-          if (startErr) {
-            socket.emit('container.error', { message: startErr });
-          } else {
-            socket.emit('container.started', data);
-          }
-        });
-      } else {
-        socket.emit('container.error', { message: err });
+      try {
+        await container.stop();
+        socket.emit(events.stopContainerSuccess);
+        await refreshContainers();
+      } catch (err) {
+        socket.emit(events.stopContainerError, err);
       }
-    });
+    } else {
+      socket.emit(
+        events.stopContainerError,
+        new Error('No container by that id')
+      );
+    }
+  });
+
+  socket.on(events.removeContainer, async ({ id }) => {
+    socket.emit(events.removeContainerAck);
+    const container = docker.getContainer(id);
+
+    if (container) {
+      try {
+        await container.remove();
+        socket.emit(events.removeContainerSuccess);
+        await refreshContainers();
+      } catch (err) {
+        socket.emit(events.removeContainerError, err);
+      }
+    } else {
+      socket.emit(
+        events.removeContainerError,
+        new Error('No container by that id')
+      );
+    }
+  });
+
+  socket.on(events.newContainer, async ({ name }) => {
+    socket.emit(events.newContainerAck);
+
+    try {
+      const container = await docker.createContainer({ Image: name });
+      socket.emit(events.newContainerSuccess);
+      const data = await container.start();
+      socket.emit(events.startContainerSuccess, data);
+    } catch (err) {
+      socket.emit(events.newContainerError, err);
+    }
   });
 });
