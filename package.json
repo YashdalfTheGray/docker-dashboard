@@ -11,7 +11,8 @@
     "preserver:prod": "tsc -p tsconfig.server.ts",
     "server:prod": "node dist/index.js",
     "start": "concurrently \"npm run server:dev\" \"npm run build:dev\"",
-    "production": "npm run build && npm run server"
+    "production": "npm run build && npm run server",
+    "clean": "npx rimraf dist/**/* public/bundle.*"
   },
   "repository": {
     "type": "git",
