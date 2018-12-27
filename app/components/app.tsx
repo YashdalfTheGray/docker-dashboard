@@ -11,6 +11,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
 
+import { events } from '../../common';
+
 import { getSocket } from '../services/socket';
 import { Container } from '../types/Container';
 
@@ -63,7 +65,7 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
 
   public componentDidMount() {
     const socket = getSocket();
-    socket.on('containers.list', (containers: any) => {
+    socket.on(events.listContainersSuccess, (containers: any) => {
       const partitioned = partition(
         containers,
         (c: any) => c.State === 'running'
@@ -80,14 +82,7 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
       console.error(message);
     });
 
-    socket.on('container.started', () => {
-      this.setState({
-        imageName: '',
-        isImageNameValid: false
-      });
-    });
-
-    socket.emit('containers.list');
+    socket.emit(events.listContainers);
   }
 
   public handleNewContainerModalOpen = () => {
@@ -104,7 +99,7 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
 
   public handleRunContainer = ({ imageName: name }: IRunDialogFormValues) => {
     const socket = getSocket();
-    socket.emit('container.new', { name });
+    socket.emit(events.newContainer, { name });
     this.handleNewContainerModalClose();
   };
 
