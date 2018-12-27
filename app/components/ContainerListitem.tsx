@@ -13,6 +13,8 @@ import createStyles from '@material-ui/core/styles/createStyles';
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 import Typography from '@material-ui/core/Typography';
 
+import { events } from '../../common';
+
 import { getSocket } from '../services/socket';
 import { Container } from '../types/Container';
 
@@ -45,14 +47,17 @@ class ContainerListItem extends React.Component<ContainerListItemProps> {
 
   public handleStartStopClick = () => {
     const { container } = this.props;
-    socket.emit(this.isRunning() ? 'container.stop' : 'container.start', {
-      id: container.id
-    });
+    socket.emit(
+      this.isRunning() ? events.stopContainer : events.startContainer,
+      {
+        id: container.id
+      }
+    );
   };
 
   public handleDeleteClick = () => {
     const { container } = this.props;
-    socket.emit('container.remove', { id: container.id });
+    socket.emit(events.removeContainer, { id: container.id });
   };
 
   public render() {
