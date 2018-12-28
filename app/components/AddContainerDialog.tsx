@@ -6,6 +6,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import { Theme } from '@material-ui/core/styles/createMuiTheme';
+import createStyles from '@material-ui/core/styles/createStyles';
+import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 import TextField from '@material-ui/core/TextField';
 
 import { Field, FieldProps, Formik, FormikProps, getIn } from 'formik';
@@ -13,6 +16,7 @@ import { object, string } from 'yup';
 
 export interface IRunDialogFormValues {
   imageName: string;
+  name?: string;
 }
 
 interface IRunContainerDialogProps {
@@ -21,13 +25,24 @@ interface IRunContainerDialogProps {
   onSubmit: (values: IRunDialogFormValues) => void;
 }
 
-class RunContainerDialog extends React.Component<IRunContainerDialogProps> {
+const runContainerDialogStyles = (theme: Theme) =>
+  createStyles({
+    field: {
+      marginBottom: '16px'
+    }
+  });
+
+type RunContainerDialogProps = IRunContainerDialogProps &
+  WithStyles<typeof runContainerDialogStyles>;
+
+class RunContainerDialog extends React.Component<RunContainerDialogProps> {
   private readonly validationSchema = object().shape({
-    imageName: string().required('Image name is required')
+    imageName: string().required('Image name is required'),
+    name: string()
   });
 
   public render() {
-    const { open, onCancel, onSubmit } = this.props;
+    const { open, onCancel, onSubmit, classes } = this.props;
 
     return (
       <Dialog
@@ -54,9 +69,33 @@ class RunContainerDialog extends React.Component<IRunContainerDialogProps> {
                   }: FieldProps<IRunDialogFormValues>) => (
                     <TextField
                       {...field}
+                      className={classes.field}
                       autoFocus={true}
                       fullWidth={true}
                       label="Image name"
+                      error={
+                        getIn(form.touched, field.name) &&
+                        !!getIn(form.errors, field.name)
+                      }
+                      helperText={
+                        getIn(form.touched, field.name)
+                          ? getIn(form.errors, field.name)
+                          : ''
+                      }
+                    />
+                  )}
+                />
+                <Field
+                  name="name"
+                  render={({
+                    field,
+                    form
+                  }: FieldProps<IRunDialogFormValues>) => (
+                    <TextField
+                      className={classes.field}
+                      {...field}
+                      fullWidth={true}
+                      label="Name (optional)"
                       error={
                         getIn(form.touched, field.name) &&
                         !!getIn(form.errors, field.name)
@@ -86,4 +125,4 @@ class RunContainerDialog extends React.Component<IRunContainerDialogProps> {
   }
 }
 
-export default RunContainerDialog;
+export default withStyles(runContainerDialogStyles)(RunContainerDialog);
