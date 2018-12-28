@@ -31,6 +31,9 @@ const containerListItemStyles = (theme: Theme) =>
       display: 'flex',
       justifyContent: 'flex-start',
       alignItems: 'center'
+    },
+    codeBit: {
+      fontSize: '1.125rem'
     }
   });
 
@@ -88,7 +91,7 @@ class ContainerListItem extends React.Component<ContainerListItemProps> {
         />
         <CardContent>
           <Typography variant="body2">
-            Image: <code>{container.image}</code>
+            Image: <code className={classes.codeBit}>{container.image}</code>
           </Typography>
           <Typography variant="body2">Status: {container.status}</Typography>
         </CardContent>
