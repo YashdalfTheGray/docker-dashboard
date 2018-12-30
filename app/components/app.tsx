@@ -110,9 +110,9 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
     });
   };
 
-  public handleRunContainer = ({ imageName: name }: IRunDialogFormValues) => {
+  public handleRunContainer = ({ imageName, name }: IRunDialogFormValues) => {
     const socket = getSocket();
-    socket.emit(events.newContainer, { name });
+    socket.emit(events.newContainer, { imageName, name });
     this.handleNewContainerModalClose();
   };
 
