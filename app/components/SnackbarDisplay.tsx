@@ -13,8 +13,8 @@ class SnackbarDisplay extends React.Component<any, ISnackbarDisplayState> {
   constructor(props: any) {
     super(props);
     this.state = {
-      message: '',
-      isVisible: false
+      message: 'Test message',
+      isVisible: true
     };
   }
 
