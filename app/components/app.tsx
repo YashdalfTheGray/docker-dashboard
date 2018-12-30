@@ -18,6 +18,7 @@ import { Container } from '../types/Container';
 
 import RunContainerDialog, { IRunDialogFormValues } from './AddContainerDialog';
 import ContainerList from './ContainerList';
+import SnackbarDisplay from './SnackbarDisplay';
 
 interface IAppState {
   containers?: Container[];
@@ -143,37 +144,40 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
     const { runContainerModalOpen } = this.state;
 
     return (
-      <div className={classes.root}>
-        <AppBar>
-          <Toolbar>
-            <Typography variant="h6" color="inherit" className={classes.grow}>
-              Docker Dashboard
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        <div className={classes.appFrame}>
-          <ContainerList
-            title="Running"
-            containers={this.state.containers || []}
-          />
-          <ContainerList
-            title="Stopped"
-            containers={this.state.stoppedContainers || []}
+      <>
+        <div className={classes.root}>
+          <AppBar>
+            <Toolbar>
+              <Typography variant="h6" color="inherit" className={classes.grow}>
+                Docker Dashboard
+              </Typography>
+            </Toolbar>
+          </AppBar>
+          <div className={classes.appFrame}>
+            <ContainerList
+              title="Running"
+              containers={this.state.containers || []}
+            />
+            <ContainerList
+              title="Stopped"
+              containers={this.state.stoppedContainers || []}
+            />
+          </div>
+          <Button
+            variant="fab"
+            className={classes.fab}
+            color="secondary"
+            onClick={this.handleNewContainerModalOpen}>
+            <AddIcon />
+          </Button>
+          <RunContainerDialog
+            open={runContainerModalOpen || false}
+            onCancel={this.handleNewContainerModalClose}
+            onSubmit={this.handleRunContainer}
           />
         </div>
-        <Button
-          variant="fab"
-          className={classes.fab}
-          color="secondary"
-          onClick={this.handleNewContainerModalOpen}>
-          <AddIcon />
-        </Button>
-        <RunContainerDialog
-          open={runContainerModalOpen || false}
-          onCancel={this.handleNewContainerModalClose}
-          onSubmit={this.handleRunContainer}
-        />
-      </div>
+        <SnackbarDisplay />
+      </>
     );
   }
 }
