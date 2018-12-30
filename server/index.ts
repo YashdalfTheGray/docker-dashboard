@@ -104,11 +104,14 @@ io.on('connection', socket => {
     }
   });
 
-  socket.on(events.newContainer, async ({ name }) => {
+  socket.on(events.newContainer, async ({ imageName, name }) => {
     socket.emit(events.newContainerAck);
 
     try {
-      const container = await docker.createContainer({ Image: name });
+      const container = await docker.createContainer({
+        Image: imageName,
+        name
+      });
       socket.emit(events.newContainerSuccess);
       const data = await container.start();
       socket.emit(events.startContainerSuccess, data);
