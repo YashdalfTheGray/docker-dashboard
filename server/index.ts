@@ -1,4 +1,5 @@
 // tslint:disable:no-console
+import { resolve } from 'path';
 
 import chalk from 'chalk';
 import * as express from 'express';
@@ -26,6 +27,10 @@ async function refreshContainers() {
 
 app.use(morgan('dev'));
 app.use(express.static('public'));
+
+app.get('/', (req, res) =>
+  res.sendFile(resolve(__dirname, './public/index.html'))
+);
 
 server.listen(port, () => {
   console.log(`Server started on ${chalk.green(port as string)}`);
