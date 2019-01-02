@@ -1,11 +1,19 @@
 const { resolve } = require('path');
+const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
-  entry: ['@babel/polyfill', './app/index.tsx'],
+  entry: {
+    index: [
+      '@babel/polyfill',
+      'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
+      './app/index.tsx'
+    ]
+  },
   output: {
     filename: 'bundle.js',
-    path: resolve(__dirname, './public')
+    path: resolve(__dirname, './public'),
+    publicPath: '/'
   },
   devtool: 'source-map',
   resolve: {
@@ -26,7 +34,10 @@ module.exports = {
       }
     ]
   },
-  plugins: [new CleanWebpackPlugin(['public/*.js', 'public/*.js.map'])],
+  plugins: [
+    new CleanWebpackPlugin(['public/*.js', 'public/*.js.map']),
+    new webpack.HotModuleReplacementPlugin()
+  ],
   stats: {
     colors: true
   }
