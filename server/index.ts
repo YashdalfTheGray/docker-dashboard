@@ -2,13 +2,15 @@
 import { resolve } from 'path';
 
 import chalk from 'chalk';
-import * as express from 'express';
+import express from 'express';
 import { Server } from 'http';
-import * as morgan from 'morgan';
-import * as socketIo from 'socket.io';
+import morgan from 'morgan';
+import socketIo from 'socket.io';
 
 import { events } from '../common';
 import docker from './docker-api';
+
+import * as webpackConfig from '../webpack.config';
 
 const app = express();
 const server = new Server(app);

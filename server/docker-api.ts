@@ -1,4 +1,4 @@
-import * as Docker from 'dockerode';
+import Docker from 'dockerode';
 
 const isWindows = process.platform === 'win32';
 
