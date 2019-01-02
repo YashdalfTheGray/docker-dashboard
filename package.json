@@ -42,6 +42,8 @@
     "@types/react-tap-event-plugin": "0.0.30",
     "@types/socket.io": "^2.1.2",
     "@types/socket.io-client": "^1.4.29",
+    "@types/webpack-dev-middleware": "^2.0.2",
+    "@types/webpack-hot-middleware": "^2.16.4",
     "@types/yup": "^0.26.3",
     "chalk": "^2.4.1",
     "concurrently": "^4.1.0",
@@ -77,6 +79,7 @@
     "typescript": "^3.2.2",
     "webpack": "^4.28.2",
     "webpack-cli": "^3.1.2",
+    "webpack-dev-middleware": "^3.4.0",
     "webpack-dev-server": "^3.1.14",
     "webpack-hot-middleware": "^2.24.3"
   }
