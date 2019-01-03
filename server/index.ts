@@ -13,7 +13,11 @@ import webpackHotMiddleware from 'webpack-hot-middleware';
 import { events } from '../common';
 import docker from './docker-api';
 
-import * as webpackConfig from '../webpack.config';
+import webpackConfig from '../webpack.config';
+
+type WebpackModeType = 'none' | 'development' | 'production';
+const mode: WebpackModeType = process.env.NODE_ENV as WebpackModeType;
+(webpackConfig as webpack.Configuration).mode = mode;
 
 const compiler = webpack(webpackConfig as webpack.Configuration);
 const app = express();
@@ -21,7 +25,9 @@ const server = new Server(app);
 const io = socketIo(server);
 
 app.use(
-  webpackDevMiddleware(compiler, { publicPath: webpackConfig.output.path })
+  webpackDevMiddleware(compiler, {
+    publicPath: webpackConfig.output.publicPath
+  })
 );
 
 app.use(webpackHotMiddleware(compiler));
@@ -45,7 +51,9 @@ app.get('/', (req, res) =>
 );
 
 server.listen(port, () => {
-  console.log(`Server started on ${chalk.green(port as string)}`);
+  console.log(
+    `Server started on ${chalk.green(`http://localhost:${port as string}`)}`
+  );
 });
 
 io.on('connection', socket => {
