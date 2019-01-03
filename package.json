@@ -4,13 +4,12 @@
   "description": "a web dashboard for Docker",
   "main": "server/index.js",
   "scripts": {
-    "build:dev:once": "webpack --mode=development",
     "build:dev": "webpack --mode=development --watch",
     "build:prod": "webpack --mode=production",
-    "server:dev": "nodemon",
+    "server:dev": "NODE_ENV=development nodemon",
     "preserver:prod": "tsc -p tsconfig.server.ts",
     "server:prod": "node dist/index.js",
-    "start": "concurrently \"npm run server:dev\" \"npm run build:dev\"",
+    "start": "npm run server:dev",
     "production": "npm run build && npm run server",
     "clean": "npx rimraf dist/**/* public/bundle.*"
   },
@@ -46,7 +45,6 @@
     "@types/webpack-hot-middleware": "^2.16.4",
     "@types/yup": "^0.26.3",
     "chalk": "^2.4.1",
-    "concurrently": "^4.1.0",
     "dockerode": "^2.4.1",
     "express": "^4.15.2",
     "formik": "^1.4.1",
