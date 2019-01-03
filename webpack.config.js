@@ -3,17 +3,17 @@ const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
-  entry: {
-    index: [
-      '@babel/polyfill',
-      'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
-      './app/index.tsx'
-    ]
-  },
+  entry: [
+    '@babel/polyfill',
+    'webpack-hot-middleware/client',
+    './app/index.tsx'
+  ],
   output: {
     filename: 'bundle.js',
     path: resolve(__dirname, './public'),
-    publicPath: '/'
+    publicPath: '/',
+    hotUpdateChunkFilename: '.hot/[id].[hash].hot-update.js',
+    hotUpdateMainFilename: '.hot/[hash].hot-update.json'
   },
   devtool: 'source-map',
   resolve: {
