@@ -6,15 +6,25 @@ import express from 'express';
 import { Server } from 'http';
 import morgan from 'morgan';
 import socketIo from 'socket.io';
+import webpack from 'webpack';
+import webpackDevMiddleware from 'webpack-dev-middleware';
+import webpackHotMiddleware from 'webpack-hot-middleware';
 
 import { events } from '../common';
 import docker from './docker-api';
 
 import * as webpackConfig from '../webpack.config';
 
+const compiler = webpack(webpackConfig as webpack.Configuration);
 const app = express();
 const server = new Server(app);
 const io = socketIo(server);
+
+app.use(
+  webpackDevMiddleware(compiler, { publicPath: webpackConfig.output.path })
+);
+
+app.use(webpackHotMiddleware(compiler));
 
 const port = process.env.PORT || process.argv[2] || 3000;
 
