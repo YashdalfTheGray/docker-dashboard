@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { chain, partition } from 'lodash';
+import { hot } from 'react-hot-loader/root';
 
 import AppBar from '@material-ui/core/AppBar';
 import Fab from '@material-ui/core/Fab';
@@ -181,4 +182,4 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
   }
 }
 
-export default withStyles(appComponentStyles)(AppComponent);
+export default hot(withStyles(appComponentStyles)(AppComponent));
