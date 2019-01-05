@@ -79,24 +79,6 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
       });
     });
 
-    // tslint:disable:no-console
-    socket.on(events.listContainersError, (err: Error) => {
-      console.error(err);
-    });
-    socket.on(events.startContainerError, (err: Error) => {
-      console.error(err);
-    });
-    socket.on(events.stopContainerError, (err: Error) => {
-      console.error(err);
-    });
-    socket.on(events.removeContainerError, (err: Error) => {
-      console.error(err);
-    });
-    socket.on(events.newContainerError, (err: Error) => {
-      console.error(err);
-    });
-    // tslint:enable:no-console
-
     socket.emit(events.listContainers);
   }
 
