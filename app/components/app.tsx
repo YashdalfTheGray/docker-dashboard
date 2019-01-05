@@ -3,7 +3,7 @@ import * as React from 'react';
 import { chain, partition } from 'lodash';
 
 import AppBar from '@material-ui/core/AppBar';
-import Button from '@material-ui/core/Button';
+import Fab from '@material-ui/core/Fab';
 import { Theme } from '@material-ui/core/styles/createMuiTheme';
 import createStyles from '@material-ui/core/styles/createStyles';
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
@@ -163,13 +163,12 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
               containers={this.state.stoppedContainers || []}
             />
           </div>
-          <Button
-            variant="fab"
+          <Fab
             className={classes.fab}
             color="secondary"
             onClick={this.handleNewContainerModalOpen}>
             <AddIcon />
-          </Button>
+          </Fab>
           <RunContainerDialog
             open={runContainerModalOpen || false}
             onCancel={this.handleNewContainerModalClose}
