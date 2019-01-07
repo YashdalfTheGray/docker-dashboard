@@ -67,19 +67,15 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
 
   public componentDidMount() {
     const socket = getSocket();
-    socket.on(events.listContainersSuccess, (containers: any) => {
-      const partitioned = partition(
-        containers,
-        (c: any) => c.State === 'running'
-      );
-
-      this.setState({
-        containers: partitioned[0].map(this.mapContainer),
-        stoppedContainers: partitioned[1].map(this.mapContainer)
-      });
-    });
+    socket.on(events.listContainersSuccess, this.listContainerListener);
 
     socket.emit(events.listContainers);
+  }
+
+  public componentWillUnmount() {
+    const socket = getSocket();
+
+    socket.off(events.listContainersSuccess, this.listContainerListener);
   }
 
   public handleNewContainerModalOpen = () => {
@@ -162,6 +158,18 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
       </>
     );
   }
+
+  private listContainerListener = (containers: any) => {
+    const partitioned = partition(
+      containers,
+      (c: any) => c.State === 'running'
+    );
+
+    this.setState({
+      containers: partitioned[0].map(this.mapContainer),
+      stoppedContainers: partitioned[1].map(this.mapContainer)
+    });
+  };
 }
 
 export default hot(withStyles(appComponentStyles)(AppComponent));
