@@ -30,6 +30,15 @@ class SnackbarDisplay extends React.Component<any, ISnackbarDisplayState> {
       events.removeContainerError,
       events.newContainerError
     ].forEach(e => socket.on(e, this.errorListener));
+
+    socket.on(
+      events.startContainerAck,
+      this.ackListener('Attempting to start container')
+    );
+    socket.on(
+      events.stopContainerAck,
+      this.ackListener('Attempting to stop container')
+    );
   }
 
   public componentWillUnmount() {
@@ -42,6 +51,15 @@ class SnackbarDisplay extends React.Component<any, ISnackbarDisplayState> {
       events.removeContainerError,
       events.newContainerError
     ].forEach(e => socket.off(e, this.errorListener));
+
+    socket.off(
+      events.startContainerAck,
+      this.ackListener('Attempting to start container')
+    );
+    socket.off(
+      events.stopContainerAck,
+      this.ackListener('Attempting to stop container')
+    );
   }
 
   public handleSnackbarClose = () => {
@@ -69,9 +87,16 @@ class SnackbarDisplay extends React.Component<any, ISnackbarDisplayState> {
     );
   }
 
-  private readonly errorListener: (err: Error) => void = (err: Error) => {
+  private readonly errorListener = (err: Error) => {
     this.setState({
       message: err.message,
+      isVisible: true
+    });
+  };
+
+  private readonly ackListener = (message: string) => () => {
+    this.setState({
+      message,
       isVisible: true
     });
   };
