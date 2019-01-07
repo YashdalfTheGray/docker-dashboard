@@ -12,6 +12,8 @@ interface ISnackbarDisplayState {
 }
 
 class SnackbarDisplay extends React.Component<any, ISnackbarDisplayState> {
+  private messageQueue: string[] = [];
+
   constructor(props: any) {
     super(props);
     this.state = {
@@ -39,6 +41,18 @@ class SnackbarDisplay extends React.Component<any, ISnackbarDisplayState> {
       events.stopContainerAck,
       this.ackListener('Attempting to stop container')
     );
+  }
+
+  public componentDidUpdate(prevProps: any, prevState: ISnackbarDisplayState) {
+    const { isVisible } = this.state;
+    const { isVisible: prevVisible } = prevState;
+
+    if (prevVisible && !isVisible && this.messageQueue.length > 0) {
+      this.setState({
+        message: this.messageQueue.shift(),
+        isVisible: true
+      });
+    }
   }
 
   public componentWillUnmount() {
@@ -88,17 +102,29 @@ class SnackbarDisplay extends React.Component<any, ISnackbarDisplayState> {
   }
 
   private readonly errorListener = (err: Error) => {
-    this.setState({
-      message: err.message,
-      isVisible: true
-    });
+    this.showMessageProperly(err.message);
   };
 
   private readonly ackListener = (message: string) => () => {
-    this.setState({
-      message,
-      isVisible: true
-    });
+    this.showMessageProperly(message);
+  };
+
+  private showMessageProperly = (message: string) => {
+    // Material Design says that we have to hide the snackbar
+    // if a new message comes in and then re-show it
+    const { isVisible } = this.state;
+
+    if (!isVisible) {
+      this.setState({
+        message,
+        isVisible: true
+      });
+    } else {
+      this.messageQueue.push(message);
+      this.setState({
+        isVisible: false
+      });
+    }
   };
 }
 
