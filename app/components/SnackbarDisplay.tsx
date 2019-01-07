@@ -34,6 +34,11 @@ class SnackbarDisplay extends React.Component<any, ISnackbarDisplayState> {
     ].forEach(e => socket.on(e, this.errorListener));
 
     socket.on(
+      events.listContainersAck,
+      this.ackListener('Refreshing container list...')
+    );
+
+    socket.on(
       events.startContainerAck,
       this.ackListener('Attempting to start container')
     );
@@ -65,6 +70,11 @@ class SnackbarDisplay extends React.Component<any, ISnackbarDisplayState> {
       events.removeContainerError,
       events.newContainerError
     ].forEach(e => socket.off(e, this.errorListener));
+
+    socket.on(
+      events.listContainersAck,
+      this.ackListener('Refreshing container list...')
+    );
 
     socket.off(
       events.startContainerAck,
