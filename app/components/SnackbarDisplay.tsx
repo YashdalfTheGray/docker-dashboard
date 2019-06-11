@@ -7,7 +7,7 @@ import { events } from '../../common';
 import { getSocket } from '../services/socket';
 
 interface ISnackbarDisplayState {
-  message: string;
+  message: string | undefined;
   isVisible: boolean;
 }
 

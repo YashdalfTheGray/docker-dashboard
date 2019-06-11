@@ -1,4 +1,4 @@
-export interface Container {
+export interface IContainer {
   id: string;
   name: string;
   image: string;

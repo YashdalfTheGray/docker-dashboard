@@ -5,7 +5,7 @@ import createStyles from '@material-ui/core/styles/createStyles';
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 import Typography from '@material-ui/core/Typography';
 
-import { Container } from '../types/Container';
+import { IContainer } from '../types/Container';
 import ContainerListItem from './ContainerListItem';
 
 const containerListStyles = (theme: Theme) =>
@@ -21,7 +21,7 @@ const containerListStyles = (theme: Theme) =>
   });
 
 interface IContainerListProps {
-  containers: Container[];
+  containers: IContainer[];
   title?: string;
 }
 
@@ -34,7 +34,7 @@ class ContainerList extends React.Component<ContainerListProps> {
     return (
       <div style={{ margin: '16px' }}>
         <Typography variant="h5">{title}</Typography>
-        <Typography variant="subheading">
+        <Typography variant="subtitle1">
           {containers.length === 0 ? 'No containers to show' : ''}
         </Typography>
         <div style={{ margin: '8px' }}>

@@ -15,15 +15,15 @@ import AddIcon from '@material-ui/icons/Add';
 import { events } from '../../common';
 
 import { getSocket } from '../services/socket';
-import { Container } from '../types/Container';
+import { IContainer } from '../types/Container';
 
-import RunContainerDialog, { IRunDialogFormValues } from './AddContainerDialog';
 import ContainerList from './ContainerList';
+import RunContainerDialog, { IRunDialogFormValues } from './RunContainerDialog';
 import SnackbarDisplay from './SnackbarDisplay';
 
 interface IAppState {
-  containers?: Container[];
-  stoppedContainers?: Container[];
+  containers?: IContainer[];
+  stoppedContainers?: IContainer[];
   runContainerModalOpen?: boolean;
   imageName?: string;
   isImageNameValid?: boolean;
@@ -41,12 +41,12 @@ const appComponentStyles = (theme: Theme) =>
       marginTop: '72px'
     },
     button: {
-      margin: theme.spacing.unit
+      margin: theme.spacing()
     },
     fab: {
       position: 'fixed',
-      bottom: theme.spacing.unit * 2,
-      right: theme.spacing.unit * 2
+      bottom: theme.spacing(2),
+      right: theme.spacing(2)
     }
   });
 
@@ -105,7 +105,7 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
     });
   };
 
-  public mapContainer = (container: any): Container => {
+  public mapContainer = (container: any): IContainer => {
     return {
       id: container.Id,
       name: chain(container.Names)

@@ -16,16 +16,16 @@ import Typography from '@material-ui/core/Typography';
 import { events } from '../../common';
 
 import { getSocket } from '../services/socket';
-import { Container } from '../types/Container';
+import { IContainer } from '../types/Container';
 
 interface IContainerListItemProps {
-  container: Container;
+  container: IContainer;
 }
 
 const containerListItemStyles = (theme: Theme) =>
   createStyles({
     chip: {
-      margin: theme.spacing.unit
+      margin: theme.spacing()
     },
     titleRow: {
       display: 'flex',
