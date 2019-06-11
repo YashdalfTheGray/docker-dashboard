@@ -1,6 +1,6 @@
 const { resolve } = require('path');
 const webpack = require('webpack');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
   entry: [
@@ -35,7 +35,10 @@ module.exports = {
     ]
   },
   plugins: [
-    new CleanWebpackPlugin(['public/*.js', 'public/*.js.map']),
+    new CleanWebpackPlugin({
+      verbose: true,
+      cleanOnceBeforeBuildPatterns: ['public/*.js', 'public/*.js.map']
+    }),
     new webpack.HotModuleReplacementPlugin()
   ],
   stats: {
