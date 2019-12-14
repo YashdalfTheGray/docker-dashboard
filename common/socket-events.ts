@@ -22,3 +22,8 @@ export const newContainer = 'container.new';
 export const newContainerAck = 'container.new.ack';
 export const newContainerSuccess = 'container.new.success';
 export const newContainerError = 'container.new.error';
+
+export const containerLogs = 'container.logs';
+export const containerLogsAck = 'container.logs.ack';
+export const containerLogsSuccess = 'container.logs.success';
+export const containerLogsError = 'container.logs.error';
