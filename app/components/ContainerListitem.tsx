@@ -12,11 +12,16 @@ import { Theme } from '@material-ui/core/styles/createMuiTheme';
 import createStyles from '@material-ui/core/styles/createStyles';
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 import Typography from '@material-ui/core/Typography';
+import DeleteIcon from '@material-ui/icons/Delete';
+import ListAltIcon from '@material-ui/icons/ListAlt';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import StopIcon from '@material-ui/icons/Stop';
 
 import { events } from '../../common';
 
 import { getSocket } from '../services/socket';
 import { IContainer } from '../types/Container';
+import AlertButton from './AlertButton';
 
 interface IContainerListItemProps {
   container: IContainer;
@@ -63,6 +68,11 @@ class ContainerListItem extends React.Component<ContainerListItemProps> {
     socket.emit(events.removeContainer, { id: container.id });
   };
 
+  public handleLogsClick = () => {
+    const { container } = this.props;
+    socket.emit(events.containerLogs, { id: container.id });
+  };
+
   public render() {
     const { classes, container } = this.props;
     return (
@@ -96,10 +106,20 @@ class ContainerListItem extends React.Component<ContainerListItemProps> {
           <Typography variant="body2">Status: {container.status}</Typography>
         </CardContent>
         <CardActions>
-          <Button onClick={this.handleStartStopClick} color="primary">
+          <Button
+            onClick={this.handleStartStopClick}
+            color="primary"
+            startIcon={this.isRunning() ? <StopIcon /> : <PlayArrowIcon />}>
             {this.isRunning() ? 'Stop' : 'Start'}
           </Button>
-          <Button onClick={this.handleDeleteClick}>Remove</Button>
+          <Button onClick={this.handleLogsClick} startIcon={<ListAltIcon />}>
+            Logs
+          </Button>
+          <AlertButton
+            onClick={this.handleDeleteClick}
+            startIcon={<DeleteIcon />}>
+            Remove
+          </AlertButton>
         </CardActions>
       </Card>
     );
