@@ -61,12 +61,8 @@ class RunContainerDialog extends React.Component<RunContainerDialogProps> {
             validationSchema={this.validationSchema}>
             {(props: FormikProps<IRunDialogFormValues>) => (
               <form onSubmit={props.handleSubmit}>
-                <Field
-                  name="imageName"
-                  render={({
-                    field,
-                    form
-                  }: FieldProps<IRunDialogFormValues>) => (
+                <Field name="imageName">
+                  {({ field, form }: FieldProps<IRunDialogFormValues>) => (
                     <TextField
                       {...field}
                       className={classes.field}
@@ -84,13 +80,9 @@ class RunContainerDialog extends React.Component<RunContainerDialogProps> {
                       }
                     />
                   )}
-                />
-                <Field
-                  name="name"
-                  render={({
-                    field,
-                    form
-                  }: FieldProps<IRunDialogFormValues>) => (
+                </Field>
+                <Field name="name">
+                  {({ field, form }: FieldProps<IRunDialogFormValues>) => (
                     <TextField
                       className={classes.field}
                       {...field}
@@ -107,7 +99,7 @@ class RunContainerDialog extends React.Component<RunContainerDialogProps> {
                       }
                     />
                   )}
-                />
+                </Field>
               </form>
             )}
           </Formik>
