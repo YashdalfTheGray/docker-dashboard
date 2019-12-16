@@ -2,5 +2,5 @@
   "ignore": ["app/**", "node_modules/**", "public/**", "dist/**"],
   "watch": ["server/**"],
   "ext": "ts",
-  "exec": "ts-node --project tsconfig.server.json ./server/index.ts"
+  "exec": "DEBUG=engine,socket.io* ts-node --project tsconfig.server.json ./server/index.ts"
 }
