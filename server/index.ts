@@ -144,4 +144,30 @@ io.on('connection', socket => {
       socket.emit(events.newContainerError, err);
     }
   });
+
+  socket.on(events.containerLogs, async ({ id }) => {
+    socket.emit(events.containerLogsAck);
+
+    const container = docker.getContainer(id);
+
+    console.log(container.id);
+
+    if (container) {
+      try {
+        const logStream = await container.logs({
+          stdout: true,
+          stderr: true,
+          timestamps: true
+        });
+        socket.emit(events.containerLogsSuccess);
+      } catch (err) {
+        socket.emit(events.containerLogsError, err);
+      }
+    } else {
+      socket.emit(
+        events.containerLogsError,
+        new Error('No container by that id')
+      );
+    }
+  });
 });
