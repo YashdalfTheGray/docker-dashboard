@@ -30,7 +30,8 @@ class SnackbarDisplay extends React.Component<any, ISnackbarDisplayState> {
       events.startContainerError,
       events.stopContainerError,
       events.removeContainerError,
-      events.newContainerError
+      events.newContainerError,
+      events.containerLogsError
     ].forEach(e => socket.on(e, this.errorListener));
 
     socket.on(
@@ -45,6 +46,11 @@ class SnackbarDisplay extends React.Component<any, ISnackbarDisplayState> {
     socket.on(
       events.stopContainerAck,
       this.ackListener('Attempting to stop container')
+    );
+
+    socket.on(
+      events.containerLogsAck,
+      this.ackListener('Requested container logs')
     );
   }
 
@@ -68,7 +74,8 @@ class SnackbarDisplay extends React.Component<any, ISnackbarDisplayState> {
       events.startContainerError,
       events.stopContainerError,
       events.removeContainerError,
-      events.newContainerError
+      events.newContainerError,
+      events.containerLogsError
     ].forEach(e => socket.off(e, this.errorListener));
 
     socket.off(
@@ -83,6 +90,10 @@ class SnackbarDisplay extends React.Component<any, ISnackbarDisplayState> {
     socket.off(
       events.stopContainerAck,
       this.ackListener('Attempting to stop container')
+    );
+    socket.off(
+      events.containerLogsAck,
+      this.ackListener('Requested container logs')
     );
   }
 
