@@ -25,6 +25,7 @@ import AlertButton from './AlertButton';
 
 interface IContainerListItemProps {
   container: IContainer;
+  openLogsDialog: (container: IContainer) => void;
 }
 
 const containerListItemStyles = (theme: Theme) =>
@@ -69,8 +70,12 @@ class ContainerListItem extends React.Component<ContainerListItemProps> {
   };
 
   public handleLogsClick = () => {
+    const { openLogsDialog } = this.props;
     const { container } = this.props;
     socket.emit(events.containerLogs, { id: container.id });
+    socket.once(events.containerLogsAck, () => {
+      openLogsDialog(container);
+    });
   };
 
   public render() {
