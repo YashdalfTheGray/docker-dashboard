@@ -23,6 +23,7 @@ const containerListStyles = (theme: Theme) =>
 interface IContainerListProps {
   containers: IContainer[];
   title?: string;
+  openLogsDialog: (container: IContainer) => void;
 }
 
 type ContainerListProps = IContainerListProps &
@@ -30,7 +31,7 @@ type ContainerListProps = IContainerListProps &
 
 class ContainerList extends React.Component<ContainerListProps> {
   public render() {
-    const { classes, title, containers } = this.props;
+    const { classes, title, containers, openLogsDialog } = this.props;
     return (
       <div style={{ margin: '16px' }}>
         <Typography variant="h5">{title}</Typography>
@@ -39,7 +40,11 @@ class ContainerList extends React.Component<ContainerListProps> {
         </Typography>
         <div style={{ margin: '8px' }}>
           {this.props.containers.map(c => (
-            <ContainerListItem key={c.name} container={c} />
+            <ContainerListItem
+              key={c.name}
+              container={c}
+              openLogsDialog={openLogsDialog}
+            />
           ))}
         </div>
       </div>

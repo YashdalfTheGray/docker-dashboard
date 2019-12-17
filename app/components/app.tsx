@@ -27,6 +27,7 @@ interface IAppState {
   runContainerModalOpen?: boolean;
   imageName?: string;
   isImageNameValid?: boolean;
+  isLogsDialogOpen?: boolean;
 }
 
 const appComponentStyles = (theme: Theme) =>
@@ -61,7 +62,8 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
       stoppedContainers: [],
       runContainerModalOpen: false,
       imageName: '',
-      isImageNameValid: false
+      isImageNameValid: false,
+      isLogsDialogOpen: false
     };
   }
 
@@ -105,6 +107,12 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
     });
   };
 
+  public handleLogsDialogOpen = (container: IContainer) => {
+    this.setState({
+      isLogsDialogOpen: true
+    });
+  };
+
   public mapContainer = (container: any): IContainer => {
     return {
       id: container.Id,
@@ -136,10 +144,12 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
             <ContainerList
               title="Running"
               containers={this.state.containers || []}
+              openLogsDialog={this.handleLogsDialogOpen}
             />
             <ContainerList
               title="Stopped"
               containers={this.state.stoppedContainers || []}
+              openLogsDialog={this.handleLogsDialogOpen}
             />
           </div>
           <Fab
