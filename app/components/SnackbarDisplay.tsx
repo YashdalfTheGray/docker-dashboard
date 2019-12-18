@@ -86,7 +86,7 @@ class SnackbarDisplay extends React.Component<any, ISnackbarDisplayState> {
       events.stopContainerAck,
       this.ackListener('Attempting to stop container')
     );
-    socket.off(events.containerLogsAck, null);
+    socket.off(events.containerLogsAck);
   }
 
   public handleSnackbarClose = () => {

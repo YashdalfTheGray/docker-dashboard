@@ -16,6 +16,10 @@ const logsDialogStyles = (theme: Theme) =>
   createStyles({
     root: {
       backgroundColor: theme.palette.background.paper
+    },
+    logsDisplay: {
+      display: 'flex',
+      flexDirection: 'column'
     }
   });
 
@@ -29,7 +33,7 @@ type LogsDialogProps = ILogsDialogProps & WithStyles<typeof logsDialogStyles>;
 
 class LogsDialog extends React.Component<LogsDialogProps> {
   public render() {
-    const { container, onClose, isOpen } = this.props;
+    const { container, onClose, isOpen, classes } = this.props;
 
     return (
       <Dialog
@@ -37,12 +41,12 @@ class LogsDialog extends React.Component<LogsDialogProps> {
         aria-labelledby="simple-dialog-title"
         open={isOpen}>
         <DialogTitle id="simple-dialog-title">
-          Logs for {container.name}
+          Logs for <code>{container.name}</code>
         </DialogTitle>
         <DialogContent>
-          <DialogContentText>
+          <DialogContentText className={classes.logsDisplay}>
             {['some code here', 'some more code here'].map((l, i) => (
-              <pre key={`logline-${i}`}>{l}</pre>
+              <code key={`logline-${i}`}>{l}</code>
             ))}
           </DialogContentText>
         </DialogContent>
