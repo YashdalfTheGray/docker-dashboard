@@ -18,16 +18,18 @@ import { getSocket } from '../services/socket';
 import { IContainer } from '../types/Container';
 
 import ContainerList from './ContainerList';
+import LogsDialog from './LogsDialog';
 import RunContainerDialog, { IRunDialogFormValues } from './RunContainerDialog';
 import SnackbarDisplay from './SnackbarDisplay';
 
 interface IAppState {
   containers?: IContainer[];
   stoppedContainers?: IContainer[];
+  selectedContainer?: IContainer;
   runContainerModalOpen?: boolean;
   imageName?: string;
   isImageNameValid?: boolean;
-  isLogsDialogOpen?: boolean;
+  isLogsDialogOpen: boolean;
 }
 
 const appComponentStyles = (theme: Theme) =>
@@ -109,7 +111,15 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
 
   public handleLogsDialogOpen = (container: IContainer) => {
     this.setState({
+      selectedContainer: container,
       isLogsDialogOpen: true
+    });
+  };
+
+  public handleLogsDialogClose = () => {
+    this.setState({
+      selectedContainer: undefined,
+      isLogsDialogOpen: false
     });
   };
 
@@ -128,7 +138,13 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
 
   public render() {
     const { classes } = this.props;
-    const { runContainerModalOpen } = this.state;
+    const {
+      runContainerModalOpen,
+      selectedContainer,
+      isLogsDialogOpen,
+      containers,
+      stoppedContainers
+    } = this.state;
 
     return (
       <>
@@ -143,12 +159,12 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
           <div className={classes.appFrame}>
             <ContainerList
               title="Running"
-              containers={this.state.containers || []}
+              containers={containers || []}
               openLogsDialog={this.handleLogsDialogOpen}
             />
             <ContainerList
               title="Stopped"
-              containers={this.state.stoppedContainers || []}
+              containers={stoppedContainers || []}
               openLogsDialog={this.handleLogsDialogOpen}
             />
           </div>
@@ -165,6 +181,19 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
           />
         </div>
         <SnackbarDisplay />
+        {(() => {
+          if (selectedContainer) {
+            return (
+              <LogsDialog
+                isOpen={isLogsDialogOpen}
+                onClose={this.handleLogsDialogClose}
+                container={selectedContainer}
+              />
+            );
+          }
+
+          return null;
+        })()}
       </>
     );
   }
