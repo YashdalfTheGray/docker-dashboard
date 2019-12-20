@@ -150,17 +150,20 @@ io.on('connection', socket => {
 
     const container = docker.getContainer(id);
 
-    console.log(container.id);
-
     if (container) {
       try {
-        const logStream = await container.logs({
+        // this fucking thing is a buffer rather than a stream
+        const logsBuffer = await container.logs({
           stdout: true,
           stderr: true,
           timestamps: true
         });
-        socket.emit(events.containerLogsSuccess);
+
+        socket.emit(events.containerLogsSuccess, {
+          logs: logsBuffer.toString()
+        });
       } catch (err) {
+        console.log(err);
         socket.emit(events.containerLogsError, err);
       }
     } else {
