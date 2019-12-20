@@ -30,6 +30,7 @@ interface IAppState {
   imageName?: string;
   isImageNameValid?: boolean;
   isLogsDialogOpen: boolean;
+  logsString: string;
 }
 
 const appComponentStyles = (theme: Theme) =>
@@ -65,7 +66,8 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
       runContainerModalOpen: false,
       imageName: '',
       isImageNameValid: false,
-      isLogsDialogOpen: false
+      isLogsDialogOpen: false,
+      logsString: ''
     };
   }
 
@@ -74,6 +76,12 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
     socket.on(events.listContainersSuccess, this.listContainerListener);
 
     socket.emit(events.listContainers);
+    socket.on(
+      events.containerLogsSuccess,
+      ({ logsString }: { logsString: string }) => {
+        this.setState({ logsString });
+      }
+    );
   }
 
   public componentWillUnmount() {
