@@ -27,13 +27,14 @@ interface ILogsDialogProps {
   container: IContainer;
   onClose: () => void;
   isOpen: boolean;
+  logsString: string;
 }
 
 type LogsDialogProps = ILogsDialogProps & WithStyles<typeof logsDialogStyles>;
 
 class LogsDialog extends React.Component<LogsDialogProps> {
   public render() {
-    const { container, onClose, isOpen, classes } = this.props;
+    const { container, onClose, isOpen, logsString, classes } = this.props;
 
     return (
       <Dialog
@@ -45,9 +46,7 @@ class LogsDialog extends React.Component<LogsDialogProps> {
         </DialogTitle>
         <DialogContent>
           <DialogContentText className={classes.logsDisplay}>
-            {['some code here', 'some more code here'].map((l, i) => (
-              <code key={`logline-${i}`}>{l}</code>
-            ))}
+            <pre>{logsString}</pre>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
