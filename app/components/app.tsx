@@ -76,18 +76,16 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
     socket.on(events.listContainersSuccess, this.listContainerListener);
 
     socket.emit(events.listContainers);
-    socket.on(
-      events.containerLogsSuccess,
-      ({ logsString }: { logsString: string }) => {
-        this.setState({ logsString });
-      }
-    );
+    socket.on(events.containerLogsSuccess, this.storeContainerLogs);
+    socket.on(events.containerLogsAck, this.resetContainerLogs);
   }
 
   public componentWillUnmount() {
     const socket = getSocket();
 
     socket.off(events.listContainersSuccess, this.listContainerListener);
+    socket.off(events.containerLogsSuccess, this.storeContainerLogs);
+    socket.off(events.containerLogsAck, this.resetContainerLogs);
   }
 
   public handleNewContainerModalOpen = () => {
@@ -151,7 +149,8 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
       selectedContainer,
       isLogsDialogOpen,
       containers,
-      stoppedContainers
+      stoppedContainers,
+      logsString
     } = this.state;
 
     return (
@@ -196,6 +195,7 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
                 isOpen={isLogsDialogOpen}
                 onClose={this.handleLogsDialogClose}
                 container={selectedContainer}
+                logsString={logsString}
               />
             );
           }
@@ -216,6 +216,14 @@ class AppComponent extends React.Component<AppComponentProps, IAppState> {
       containers: partitioned[0].map(this.mapContainer),
       stoppedContainers: partitioned[1].map(this.mapContainer)
     });
+  };
+
+  private storeContainerLogs = (data: { logs: string }) => {
+    this.setState({ logsString: data.logs });
+  };
+
+  private resetContainerLogs = () => {
+    this.setState({ logsString: '' });
   };
 }
 
