@@ -1,21 +1,40 @@
 import * as React from 'react';
 
+import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import IconButton from '@material-ui/core/IconButton';
+import Slide from '@material-ui/core/Slide';
 import { Theme } from '@material-ui/core/styles/createMuiTheme';
 import createStyles from '@material-ui/core/styles/createStyles';
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
+import Toolbar from '@material-ui/core/Toolbar';
+import { TransitionProps } from '@material-ui/core/transitions';
+import Typography from '@material-ui/core/Typography';
+import CloseIcon from '@material-ui/icons/Close';
 
 import { IContainer } from '../types/Container';
+
+const Transition = React.forwardRef<unknown, TransitionProps>(
+  function TransitionComponent(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+  }
+);
 
 const logsDialogStyles = (theme: Theme) =>
   createStyles({
     root: {
       backgroundColor: theme.palette.background.paper
+    },
+    appBar: {
+      position: 'relative'
+    },
+    title: {
+      marginLeft: theme.spacing(2),
+      flex: 1
     },
     logsDisplay: {
       display: 'flex',
@@ -38,15 +57,26 @@ class LogsDialog extends React.Component<LogsDialogProps> {
 
     return (
       <Dialog
+        fullScreen={true}
+        TransitionComponent={Transition}
         onClose={onClose}
         aria-labelledby="simple-dialog-title"
         open={isOpen}>
-        <DialogTitle id="simple-dialog-title">
-          Logs for <code>{container.name}</code>
-        </DialogTitle>
+        <AppBar className={classes.appBar}>
+          <Toolbar>
+            <Typography variant="h6" className={classes.title}>
+              Logs for <code>{container.name}</code>
+            </Typography>
+            <IconButton color="inherit" onClick={onClose} aria-label="close">
+              <CloseIcon />
+            </IconButton>
+          </Toolbar>
+        </AppBar>
         <DialogContent>
           <DialogContentText className={classes.logsDisplay}>
-            <pre>{logsString}</pre>
+            {logsString.split('\n').map((line, i) => (
+              <code key={`logline-${i}`}>{line}</code>
+            ))}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
