@@ -6,16 +6,20 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormGroup from '@material-ui/core/FormGroup';
 import IconButton from '@material-ui/core/IconButton';
 import Slide from '@material-ui/core/Slide';
 import { Theme } from '@material-ui/core/styles/createMuiTheme';
 import createStyles from '@material-ui/core/styles/createStyles';
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
+import Switch from '@material-ui/core/Switch';
 import Toolbar from '@material-ui/core/Toolbar';
 import { TransitionProps } from '@material-ui/core/transitions';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 
+import { getSocket } from '../services/socket';
 import { IContainer } from '../types/Container';
 
 const Transition = React.forwardRef<unknown, TransitionProps>(
@@ -37,6 +41,7 @@ const logsDialogStyles = (theme: Theme) =>
       flex: 1
     },
     logsDisplay: {
+      marginTop: '16px',
       display: 'flex',
       flexDirection: 'column'
     }
@@ -51,9 +56,28 @@ interface ILogsDialogProps {
 
 type LogsDialogProps = ILogsDialogProps & WithStyles<typeof logsDialogStyles>;
 
-class LogsDialog extends React.Component<LogsDialogProps> {
+interface ILogDialogState {
+  timestampsEnabled: boolean;
+}
+
+class LogsDialog extends React.Component<LogsDialogProps, ILogDialogState> {
+  constructor(props: LogsDialogProps) {
+    super(props);
+
+    this.state = {
+      timestampsEnabled: true
+    };
+  }
+
+  public handleTimestampsEnabledChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    this.setState({ timestampsEnabled: event.target.checked });
+  };
+
   public render() {
     const { container, onClose, isOpen, logsString, classes } = this.props;
+    const { timestampsEnabled } = this.state;
 
     return (
       <Dialog
@@ -73,6 +97,18 @@ class LogsDialog extends React.Component<LogsDialogProps> {
           </Toolbar>
         </AppBar>
         <DialogContent>
+          <FormGroup row={true}>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={timestampsEnabled}
+                  onChange={this.handleTimestampsEnabledChange}
+                  value="timestampsEnabled"
+                />
+              }
+              label="Timestamps"
+            />
+          </FormGroup>
           <DialogContentText className={classes.logsDisplay}>
             {logsString.split('\n').map((line, i) => (
               <code key={`logline-${i}`}>{line}</code>
