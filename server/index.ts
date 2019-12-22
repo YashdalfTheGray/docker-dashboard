@@ -145,18 +145,17 @@ io.on('connection', socket => {
     }
   });
 
-  socket.on(events.containerLogs, async ({ id }) => {
+  socket.on(events.containerLogs, async ({ id, timestamps }) => {
     socket.emit(events.containerLogsAck);
 
     const container = docker.getContainer(id);
 
     if (container) {
       try {
-        // this fucking thing is a buffer rather than a stream
         const logsBuffer = await container.logs({
           stdout: true,
           stderr: true,
-          timestamps: true
+          timestamps: timestamps && true
         });
 
         socket.emit(events.containerLogsSuccess, {
