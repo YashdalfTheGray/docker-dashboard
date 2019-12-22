@@ -6,8 +6,10 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
+import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
+import FormLabel from '@material-ui/core/FormLabel';
 import IconButton from '@material-ui/core/IconButton';
 import Slide from '@material-ui/core/Slide';
 import { Theme } from '@material-ui/core/styles/createMuiTheme';
@@ -44,6 +46,9 @@ const logsDialogStyles = (theme: Theme) =>
       marginTop: '16px',
       display: 'flex',
       flexDirection: 'column'
+    },
+    options: {
+      marginTop: '16px'
     }
   });
 
@@ -97,18 +102,21 @@ class LogsDialog extends React.Component<LogsDialogProps, ILogDialogState> {
           </Toolbar>
         </AppBar>
         <DialogContent>
-          <FormGroup row={true}>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={timestampsEnabled}
-                  onChange={this.handleTimestampsEnabledChange}
-                  value="timestampsEnabled"
-                />
-              }
-              label="Timestamps"
-            />
-          </FormGroup>
+          <FormControl component="fieldset" className={classes.options}>
+            <FormLabel component="legend">Options</FormLabel>
+            <FormGroup row={true}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={timestampsEnabled}
+                    onChange={this.handleTimestampsEnabledChange}
+                    value="timestampsEnabled"
+                  />
+                }
+                label="Timestamps"
+              />
+            </FormGroup>
+          </FormControl>
           <DialogContentText className={classes.logsDisplay}>
             {logsString.split('\n').map((line, i) => (
               <code key={`logline-${i}`}>{line}</code>
