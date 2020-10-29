@@ -12,8 +12,8 @@ module.exports = {
     filename: 'bundle.js',
     path: resolve(__dirname, './public'),
     publicPath: '/',
-    hotUpdateChunkFilename: '.hot/[id].[hash].hot-update.js',
-    hotUpdateMainFilename: '.hot/[hash].hot-update.json'
+    hotUpdateChunkFilename: '.hot/[id].[chunkhash].hot-update.js',
+    hotUpdateMainFilename: '.hot/[chunkhash].hot-update.json'
   },
   devtool: 'source-map',
   resolve: {
