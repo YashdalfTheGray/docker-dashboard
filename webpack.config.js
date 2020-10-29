@@ -4,7 +4,8 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
   entry: [
-    '@babel/polyfill',
+    'core-js/stable',
+    'regenerator-runtime/runtime',
     'webpack-hot-middleware/client',
     './app/index.tsx'
   ],
@@ -12,8 +13,8 @@ module.exports = {
     filename: 'bundle.js',
     path: resolve(__dirname, './public'),
     publicPath: '/',
-    hotUpdateChunkFilename: '.hot/[id].[chunkhash].hot-update.js',
-    hotUpdateMainFilename: '.hot/[chunkhash].hot-update.json'
+    hotUpdateChunkFilename: '.hot/[id].[contenthash].hot-update.js',
+    hotUpdateMainFilename: '.hot/[contenthash].hot-update.json'
   },
   devtool: 'source-map',
   resolve: {
