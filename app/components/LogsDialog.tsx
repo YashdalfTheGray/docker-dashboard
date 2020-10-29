@@ -11,20 +11,18 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormLabel from '@material-ui/core/FormLabel';
 import IconButton from '@material-ui/core/IconButton';
-import Slide from '@material-ui/core/Slide';
+import Slide, { SlideProps } from '@material-ui/core/Slide';
 import { Theme } from '@material-ui/core/styles/createMuiTheme';
 import createStyles from '@material-ui/core/styles/createStyles';
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 import Switch from '@material-ui/core/Switch';
 import Toolbar from '@material-ui/core/Toolbar';
-import { TransitionProps } from '@material-ui/core/transitions';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 
-import { getSocket } from '../services/socket';
 import { IContainer } from '../types/Container';
 
-const Transition = React.forwardRef<unknown, TransitionProps>(
+const Transition = React.forwardRef<unknown, SlideProps>(
   function TransitionComponent(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
   }
