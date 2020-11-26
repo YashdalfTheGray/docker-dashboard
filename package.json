@@ -4,7 +4,8 @@
   "description": "a web dashboard for Docker",
   "main": "server/index.js",
   "scripts": {
-    "build:dev": "webpack --mode=development --watch --progress",
+    "build:dev": "webpack --mode=development --progress",
+    "build:watch": "webpack --mode=development --watch --progress",
     "build:prod": "webpack --mode=production --progress",
     "server:dev": "NODE_ENV=development nodemon",
     "preserver:prod": "tsc -p tsconfig.server.ts",
