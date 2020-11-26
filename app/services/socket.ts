@@ -1,10 +1,10 @@
-import * as io from 'socket.io-client';
+import io from 'socket.io-client';
 
 let socket: typeof io.Socket;
 
-function getSocket(url: string = window.location.href) {
+function getSocket() {
   if (!socket) {
-    socket = io.connect(url);
+    socket = io();
   }
   return socket;
 }
