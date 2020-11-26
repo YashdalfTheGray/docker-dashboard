@@ -3,9 +3,9 @@ import { resolve } from 'path';
 
 import chalk from 'chalk';
 import express from 'express';
-import { Server } from 'http';
+import { createServer } from 'http';
 import morgan from 'morgan';
-import socketIo from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
@@ -21,12 +21,12 @@ const mode: WebpackModeType = process.env.NODE_ENV as WebpackModeType;
 
 const compiler = webpack(webpackConfig as webpack.Configuration);
 const app = express();
-const server = new Server(app);
-const io = socketIo(server);
+const httpServer = createServer(app);
+const io = new Server(httpServer);
 
 app.use(
   webpackDevMiddleware(compiler, {
-    publicPath: webpackConfig.output.publicPath
+    publicPath: webpackConfig.output.publicPath,
   })
 );
 
@@ -50,13 +50,13 @@ app.get('/', (req, res) =>
   res.sendFile(resolve(__dirname, './public/index.html'))
 );
 
-server.listen(port, () => {
+httpServer.listen(port, () => {
   console.log(
     `Server started on ${chalk.green(`http://localhost:${port as string}`)}`
   );
 });
 
-io.on('connection', socket => {
+io.on('connection', (socket: Socket) => {
   const refreshContainersInterval = setInterval(refreshContainers, 2000);
 
   socket.on('disconnect', () => {
@@ -135,7 +135,7 @@ io.on('connection', socket => {
     try {
       const container = await docker.createContainer({
         Image: imageName,
-        name
+        name,
       });
       socket.emit(events.newContainerSuccess);
       const data = await container.start();
@@ -155,11 +155,11 @@ io.on('connection', socket => {
         const logsBuffer = await container.logs({
           stdout: true,
           stderr: true,
-          timestamps: timestamps && true
+          timestamps: timestamps && true,
         });
 
         socket.emit(events.containerLogsSuccess, {
-          logs: logsBuffer.toString()
+          logs: logsBuffer.toString(),
         });
       } catch (err) {
         console.log(err);
