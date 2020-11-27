@@ -6,31 +6,20 @@ import express from 'express';
 import { createServer } from 'http';
 import morgan from 'morgan';
 import { Server, Socket } from 'socket.io';
-import webpack from 'webpack';
-import webpackDevMiddleware from 'webpack-dev-middleware';
-import webpackHotMiddleware from 'webpack-hot-middleware';
 
 import { events } from '../common';
 import docker from './docker-api';
+import hotModuleReloadingSetup from './hmr';
 
 import webpackConfig from '../webpack.config';
 
-type WebpackModeType = 'none' | 'development' | 'production';
-const mode: WebpackModeType = process.env.NODE_ENV as WebpackModeType;
-(webpackConfig as webpack.Configuration).mode = mode;
-
-const compiler = webpack(webpackConfig as webpack.Configuration);
 const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, { serveClient: false });
 
-app.use(
-  webpackDevMiddleware(compiler, {
-    publicPath: webpackConfig(null, { mode }).output.publicPath,
-  })
-);
-
-app.use(webpackHotMiddleware(compiler));
+if (process.env.NODE_ENV === 'development') {
+  hotModuleReloadingSetup(app);
+}
 
 const port = process.env.PORT || process.argv[2] || 3000;
 
