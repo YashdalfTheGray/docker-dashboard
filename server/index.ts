@@ -22,11 +22,11 @@ const mode: WebpackModeType = process.env.NODE_ENV as WebpackModeType;
 const compiler = webpack(webpackConfig as webpack.Configuration);
 const app = express();
 const httpServer = createServer(app);
-const io = new Server(httpServer);
+const io = new Server(httpServer, { serveClient: false });
 
 app.use(
   webpackDevMiddleware(compiler, {
-    publicPath: webpackConfig.output.publicPath,
+    publicPath: webpackConfig(null, { mode }).output.publicPath,
   })
 );
 
