@@ -31,10 +31,11 @@ export default function hotModuleReloadingSetup(
   return { config, compiler };
 }
 
-function getWebpackConfig(path: string, ...args: any[]): webpack.Configuration {
-  const configOrFunction:
-    | WebpackConfigFunction
-    | webpack.Configuration = require(path);
+function getWebpackConfig<F extends WebpackConfigFunction>(
+  path: string,
+  ...args: Parameters<F>
+): webpack.Configuration {
+  const configOrFunction: F | webpack.Configuration = require(path);
 
   if (typeof configOrFunction === 'function') {
     return configOrFunction.call(null, ...args);
