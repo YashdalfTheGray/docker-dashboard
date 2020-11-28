@@ -14,9 +14,10 @@ type WebpackConfigAndCompiler = {
 };
 
 export default function hotModuleReloadingSetup(
-  app: express.Application
+  app: express.Application,
+  configFilePath: string = '../../webpack.config.js'
 ): WebpackConfigAndCompiler {
-  const webpackConfigFunction: WebpackConfigFunction = require('../../webpack.config.js');
+  const webpackConfigFunction: WebpackConfigFunction = require(configFilePath);
 
   const mode: WebpackModeType = process.env.NODE_ENV as WebpackModeType;
 

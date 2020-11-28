@@ -11,8 +11,6 @@ import { events } from '../common';
 import docker from './docker-api';
 import hotModuleReloadingSetup from './hmr';
 
-import webpackConfig from '../webpack.config';
-
 const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, { serveClient: false });
