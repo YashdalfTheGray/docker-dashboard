@@ -17,11 +17,8 @@ export default function hotModuleReloadingSetup(
   app: express.Application,
   configFilePath: string = '../../webpack.config.js'
 ): WebpackConfigAndCompiler {
-  const webpackConfigFunction: WebpackConfigFunction = require(configFilePath);
-
   const mode: WebpackModeType = process.env.NODE_ENV as WebpackModeType;
-
-  const config = webpackConfigFunction(null, { mode });
+  const config = getWebpackConfig(configFilePath, null, { mode });
   const compiler = webpack(config);
 
   app.use(
@@ -32,4 +29,15 @@ export default function hotModuleReloadingSetup(
   app.use(require('webpack-hot-middleware')(compiler));
 
   return { config, compiler };
+}
+
+function getWebpackConfig(path: string, ...args: any[]): webpack.Configuration {
+  const configOrFunction:
+    | WebpackConfigFunction
+    | webpack.Configuration = require(path);
+
+  if (typeof configOrFunction === 'function') {
+    return configOrFunction.call(null, ...args);
+  }
+  return configOrFunction;
 }
