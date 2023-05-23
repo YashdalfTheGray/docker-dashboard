@@ -39,7 +39,7 @@
     "@types/morgan": "^1.9.4",
     "@types/react": "^16.14.2",
     "@types/react-dom": "^16.9.10",
-    "@types/socket.io": "^2.1.11",
+    "@types/socket.io": "^3.0.2",
     "@types/socket.io-client": "^3.0.0",
     "@types/yup": "^0.29.9",
     "chalk": "^5.2.0",
