@@ -68,7 +68,7 @@
     "nodemon": "^3.0.1",
     "prettier": "^2.8.8",
     "react-hot-loader": "^4.13.1",
-    "regenerator-runtime": "^0.13.11",
+    "regenerator-runtime": "^0.14.1",
     "source-map-loader": "^4.0.1",
     "ts-loader": "^9.4.4",
     "ts-node": "^10.9.1",
